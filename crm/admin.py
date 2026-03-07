@@ -11,9 +11,15 @@ from .models import (
 
 
 
+
+
+
+
 # ---------------------------------------------------------------------------
 # Existing CRM Admin
 # ---------------------------------------------------------------------------
+
+
 
 
 @admin.register(Member)
@@ -49,6 +55,10 @@ class MemberAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
 @admin.register(Chamber)
 class ChamberAdmin(admin.ModelAdmin):
     list_display = ['name', 'city', 'region', 'chamber_lead']
@@ -58,9 +68,17 @@ class ChamberAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
 class CircleMemberInline(admin.TabularInline):
     model = IronCircle.members.through
     extra = 1
+
+
+
+
 
 
 
@@ -74,9 +92,15 @@ class IronCircleAdmin(admin.ModelAdmin):
     exclude = ['members']
 
 
+
+
     def member_count(self, obj):
         return obj.members.count()
     member_count.short_description = 'Members'
+
+
+
+
 
 
 
@@ -88,6 +112,10 @@ class EventAttendanceInline(admin.TabularInline):
 
 
 
+
+
+
+
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = ['name', 'event_type', 'date', 'location', 'is_published']
@@ -95,6 +123,10 @@ class EventAdmin(admin.ModelAdmin):
     search_fields = ['name', 'location']
     list_editable = ['is_published']
     inlines = [EventAttendanceInline]
+
+
+
+
 
 
 
@@ -111,21 +143,31 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
 @admin.register(ContactSubmission)
 class ContactSubmissionAdmin(admin.ModelAdmin):
     list_display = ['name', 'email', 'phone', 'city', 'is_processed', 'created_at']
     list_filter = ['is_processed', 'how_heard']
     search_fields = ['name', 'email']
     list_editable = ['is_processed']
-    readonly_fields = ['created_at']
+    readonly_fields = ['assigned_date']
+
+
 
 
     actions = ['mark_as_processed', 'create_member_from_submission']
 
 
+
+
     def mark_as_processed(self, request, queryset):
         queryset.update(is_processed=True)
     mark_as_processed.short_description = "Mark selected as processed"
+
+
 
 
     def create_member_from_submission(self, request, queryset):
@@ -153,16 +195,20 @@ class ContactSubmissionAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
 # ---------------------------------------------------------------------------
 # Agent Framework Admin
 # ---------------------------------------------------------------------------
 
 
+
+
 @admin.register(AgentConfig)
 class AgentConfigAdmin(admin.ModelAdmin):
     list_display = ['agent_name', 'is_active', 'last_run', 'run_count', 'updated_at']
-    list_filter = ['is_active']
-    list_editable = ['is_active']
     readonly_fields = ['last_run', 'run_count', 'created_at', 'updated_at']
     fieldsets = (
         (None, {
@@ -181,22 +227,21 @@ class AgentConfigAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
 @admin.register(EmailTemplate)
 class EmailTemplateAdmin(admin.ModelAdmin):
-    list_display = ['template_key', 'subject', 'from_email', 'is_active', 'updated_at']
-    list_filter = ['is_active']
-    list_editable = ['is_active']
+    list_display = ['template_key', 'subject', 'updated_at']
     search_fields = ['subject', 'body_html']
     readonly_fields = ['created_at', 'updated_at']
     fieldsets = (
         (None, {
-            'fields': ('template_key', 'is_active')
-        }),
-        ('Sender', {
-            'fields': ('from_name', 'from_email')
+            'fields': ('template_key',)
         }),
         ('Content', {
-            'fields': ('subject', 'body_html', 'body_text'),
+            'fields': ('subject', 'body_html'),
             'description': (
                 'Use Django template variables: {{ name }}, {{ first_name }}, '
                 '{{ email }}, {{ city }}, {{ event_name }}, {{ event_date }}, '
@@ -212,6 +257,10 @@ class EmailTemplateAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
 @admin.register(TaskLog)
 class TaskLogAdmin(admin.ModelAdmin):
     list_display = ['created_at', 'agent_name', 'task_name', 'level_badge', 'member']
@@ -222,6 +271,8 @@ class TaskLogAdmin(admin.ModelAdmin):
         'details', 'created_at'
     ]
     date_hierarchy = 'created_at'
+
+
 
 
     def level_badge(self, obj):
@@ -240,12 +291,20 @@ class TaskLogAdmin(admin.ModelAdmin):
     level_badge.short_description = 'Level'
 
 
+
+
     def has_add_permission(self, request):
         return False
 
 
+
+
     def has_change_permission(self, request, obj=None):
         return False
+
+
+
+
 
 
 
@@ -261,14 +320,20 @@ class MemberActivityLogAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
 @admin.register(AdminFlag)
 class AdminFlagAdmin(admin.ModelAdmin):
-    list_display = ['title', 'flag_type', 'priority_badge', 'agent_name', 'member', 'is_resolved', 'created_at']
-    list_filter = ['is_resolved', 'flag_type', 'priority', 'agent_name']
+    list_display = ['title', 'priority_badge', 'agent_name', 'member', 'is_resolved', 'created_at']
+    list_filter = ['is_resolved', 'priority', 'agent_name']
     search_fields = ['title', 'description', 'member__first_name', 'member__last_name']
     list_editable = ['is_resolved']
     readonly_fields = ['created_at']
     actions = ['resolve_flags']
+
+
 
 
     def priority_badge(self, obj):
@@ -287,6 +352,8 @@ class AdminFlagAdmin(admin.ModelAdmin):
     priority_badge.short_description = 'Priority'
 
 
+
+
     def resolve_flags(self, request, queryset):
         from django.utils import timezone
         queryset.update(
@@ -300,12 +367,18 @@ class AdminFlagAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
 @admin.register(SocialMediaPost)
 class SocialMediaPostAdmin(admin.ModelAdmin):
     list_display = ['platform', 'caption_preview', 'content', 'status', 'scheduled_for']
     list_filter = ['platform', 'status']
     search_fields = ['content']
     list_editable = ['status']
+
+
 
 
     def caption_preview(self, obj):
@@ -315,11 +388,19 @@ class SocialMediaPostAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
 @admin.register(CircleAssignmentHistory)
 class CircleAssignmentHistoryAdmin(admin.ModelAdmin):
     list_display = ['member', 'circle', 'assigned_date', 'removed_date', 'reason']
     list_filter = ['assigned_date']
-    readonly_fields = ['created_at']
+    readonly_fields = ['assigned_date']
+
+
+
+
 
 
 
@@ -332,6 +413,8 @@ class LeadershipProgressionAdmin(admin.ModelAdmin):
     list_editable = ['status']
     readonly_fields = ['created_at']
     actions = ['approve_progressions']
+
+
 
 
     def approve_progressions(self, request, queryset):
@@ -347,6 +430,10 @@ class LeadershipProgressionAdmin(admin.ModelAdmin):
             member.save(update_fields=['role', 'updated_at'])
         self.message_user(request, f"{queryset.count()} progression(s) approved and roles updated.")
     approve_progressions.short_description = "Approve selected and update member roles"
+
+
+
+
 
 
 
