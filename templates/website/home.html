@@ -1,0 +1,510 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Chambers of Men | Awaken. Equip. Deploy.</title>
+    <meta name="description" content="A movement restoring men to the image of God through structured leadership, doctrinal purity, and strategic deployment into every sphere of influence.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,200;0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&display=swap" rel="stylesheet">
+    <style>
+        :root{--bg-deep:#08090D;--bg-base:#0D0F14;--bg-surface:#14161E;--bg-elevated:#1A1D28;--bg-card:rgba(20,22,30,.7);--teal:#14B8A6;--teal-light:#2DD4BF;--teal-dim:#0D9488;--teal-glow:rgba(20,184,166,.15);--gold:#D4A853;--gold-light:#E8C068;--gold-dim:#B8923F;--gold-glow:rgba(212,168,83,.12);--cream:#F1F0EB;--text-primary:#E8E6E1;--text-secondary:#8B919E;--text-dim:#5C6370;--border:rgba(255,255,255,.06);--border-hover:rgba(20,184,166,.2);--glass:rgba(20,22,30,.55);--glass-border:rgba(255,255,255,.08)}
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        html{scroll-behavior:smooth}
+        body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg-deep);color:var(--text-secondary);line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+        ::selection{background:rgba(20,184,166,.3);color:var(--cream)}
+        body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.018'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+        h1,h2,h3,h4{font-family:'Playfair Display',Georgia,serif;color:var(--cream);line-height:1.15;font-weight:700}
+        .at{color:var(--teal)}.gt{color:var(--gold)}
+        .eyebrow{font-family:'DM Sans',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.25em;text-transform:uppercase;color:var(--teal);display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem}
+        .eyebrow::before{content:'';width:32px;height:1px;background:var(--teal)}
+        .container{max-width:1200px;margin:0 auto;padding:0 2rem}
+        .section{padding:8rem 0;position:relative}
+        .reveal{opacity:0;transform:translateY(40px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
+        .reveal.visible{opacity:1;transform:translateY(0)}
+        .reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}.reveal-delay-4{transition-delay:.4s}
+        @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+        @keyframes gradient-shift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+        nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;background:rgba(8,9,13,.6);backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--border);transition:all .4s}
+        nav.scrolled{background:rgba(8,9,13,.92);border-bottom-color:rgba(20,184,166,.1);box-shadow:0 8px 32px rgba(0,0,0,.4)}
+        .nav-brand{display:flex;align-items:center;gap:.85rem;text-decoration:none}
+        .nav-logo{width:38px;height:38px;border:1.5px solid var(--teal);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:800;font-size:.85rem;color:var(--teal);transition:all .3s}
+        .nav-brand:hover .nav-logo{background:var(--teal);color:var(--bg-deep)}
+        .nav-brand-text{font-family:'DM Sans',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-primary)}
+        .nav-links{display:flex;gap:0;list-style:none;align-items:center;height:100%}
+        .nav-links a{color:var(--text-dim);text-decoration:none;font-size:.72rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;padding:0 1.3rem;height:100%;display:flex;align-items:center;position:relative;transition:color .3s}
+        .nav-links a::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:0;height:2px;background:var(--teal);border-radius:1px;transition:width .3s cubic-bezier(.16,1,.3,1)}
+        .nav-links a:hover{color:var(--cream)}.nav-links a:hover::after{width:calc(100% - 2.6rem)}
+        .nav-cta-btn{margin-left:1.5rem;padding:.55rem 1.6rem;background:transparent;border:1px solid var(--teal);color:var(--teal);font-family:'DM Sans',sans-serif;font-size:.68rem;font-weight:600;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;border-radius:4px;cursor:pointer;transition:all .35s}
+        .nav-cta-btn:hover{background:var(--teal);color:var(--bg-deep);box-shadow:0 0 28px rgba(20,184,166,.25)}
+        .mobile-toggle{display:none;background:none;border:none;cursor:pointer;padding:.5rem}
+        .mobile-toggle span{display:block;width:22px;height:1.5px;background:var(--cream);margin:5px 0;transition:all .3s}
+
+        .hero{min-height:100vh;display:flex;align-items:center;position:relative;overflow:hidden;padding:8rem 0 6rem}
+        .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 65% 30%,rgba(20,184,166,.06),transparent 70%),radial-gradient(ellipse 45% 60% at 20% 70%,rgba(212,168,83,.04),transparent 60%),radial-gradient(ellipse 80% 40% at 50% 100%,rgba(20,184,166,.03),transparent),var(--bg-deep)}
+        .hero-lines{position:absolute;inset:0;overflow:hidden}
+        .hero-lines::before{content:'';position:absolute;top:15%;right:10%;width:1px;height:40%;background:linear-gradient(180deg,transparent,rgba(20,184,166,.12),transparent)}
+        .hero-lines::after{content:'';position:absolute;top:30%;left:6%;width:1px;height:30%;background:linear-gradient(180deg,transparent,rgba(212,168,83,.08),transparent)}
+        .hero-orb{position:absolute;width:400px;height:400px;border-radius:50%;filter:blur(100px);animation:float 8s ease-in-out infinite}
+        .hero-orb-1{top:10%;right:15%;background:rgba(20,184,166,.07)}
+        .hero-orb-2{bottom:20%;left:10%;background:rgba(212,168,83,.05);animation-delay:-3s}
+        .hero-content{position:relative;z-index:2;max-width:720px}
+        .hero-eyebrow{font-size:.68rem;font-weight:600;letter-spacing:.35em;text-transform:uppercase;color:var(--teal);margin-bottom:2rem;display:inline-flex;align-items:center;gap:.8rem}
+        .hero-eyebrow::before{content:'';width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--teal))}
+        .hero h1{font-size:clamp(3rem,6.5vw,5.2rem);font-weight:800;line-height:1.05;margin-bottom:2rem;letter-spacing:-.02em}
+        .hero h1 .line-2{display:block;background:linear-gradient(135deg,var(--teal-light),var(--teal),var(--teal-dim));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+        .hero-sub{font-size:1.1rem;line-height:1.8;color:var(--text-secondary);max-width:540px;margin-bottom:3rem}
+        .hero-actions{display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+        .btn-primary{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 2.2rem;background:var(--teal);color:var(--bg-deep);font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;border:none;border-radius:6px;cursor:pointer;transition:all .35s}
+        .btn-primary:hover{background:var(--teal-light);box-shadow:0 8px 32px rgba(20,184,166,.3);transform:translateY(-2px)}
+        .btn-primary svg{width:16px;height:16px}
+        .btn-ghost{display:inline-flex;align-items:center;gap:.5rem;padding:.9rem 2rem;background:transparent;color:var(--text-primary);font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;letter-spacing:.08em;text-decoration:none;border:1px solid var(--border);border-radius:6px;transition:all .35s}
+        .btn-ghost:hover{border-color:var(--gold-dim);color:var(--gold)}
+
+        .mandate{background:var(--bg-base)}
+        .mandate-header{text-align:center;max-width:680px;margin:0 auto 5rem}
+        .mandate-header h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:1.2rem}
+        .mandate-header p{font-size:1.05rem}
+        .mandate-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+        .mandate-card{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--glass-border);border-radius:12px;padding:2.5rem 2rem;position:relative;overflow:hidden;transition:all .4s cubic-bezier(.16,1,.3,1)}
+        .mandate-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--teal),transparent);opacity:0;transition:opacity .4s}
+        .mandate-card:hover{border-color:var(--border-hover);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.3)}
+        .mandate-card:hover::before{opacity:1}
+        .mandate-num{font-family:'Playfair Display',serif;font-size:3.5rem;font-weight:800;color:var(--bg-elevated);position:absolute;top:1rem;right:1.5rem;line-height:1}
+        .mandate-card:hover .mandate-num{color:rgba(20,184,166,.08)}
+        .mandate-icon{width:48px;height:48px;border-radius:10px;background:var(--teal-glow);display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem}
+        .mandate-icon svg{width:22px;height:22px;stroke:var(--teal);fill:none;stroke-width:1.5}
+        .mandate-card h3{font-size:1.4rem;margin-bottom:.8rem}
+        .mandate-card p{font-size:.92rem;line-height:1.7}
+
+        .pillars-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:4rem;gap:2rem}
+        .pillars-header h2{font-size:clamp(2rem,4vw,3rem);max-width:500px}
+        .pillars-header p{max-width:380px;text-align:right;font-size:.95rem}
+        .pillars-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:1.2rem}
+        .pillar-card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:12px;padding:2rem 1.4rem;text-align:center;transition:all .4s}
+        .pillar-card:hover{border-color:var(--border-hover);transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+        .pillar-icon{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--teal-glow),var(--gold-glow));display:flex;align-items:center;justify-content:center;margin:0 auto 1.4rem;transition:transform .4s}
+        .pillar-card:hover .pillar-icon{transform:scale(1.1)}
+        .pillar-icon svg{width:24px;height:24px;stroke:var(--teal-light);fill:none;stroke-width:1.5}
+        .pillar-card h4{font-size:.95rem;font-weight:600;margin-bottom:.7rem}
+        .pillar-card p{font-size:.82rem;line-height:1.6;color:var(--text-dim)}
+        .pillar-verse{display:block;margin-top:1rem;font-size:.72rem;font-style:italic;color:var(--gold-dim)}
+
+        .vision{background:var(--bg-base);position:relative;overflow:hidden}
+        .vision::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(20,184,166,.04),transparent 70%);filter:blur(80px)}
+        .vision-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;position:relative;z-index:1}
+        .vision-content h2{font-size:clamp(2rem,3.8vw,2.8rem);margin-bottom:1.5rem}
+        .vision-content p{font-size:1rem;margin-bottom:1.5rem;line-height:1.8}
+        .vision-cards{display:flex;flex-direction:column;gap:1.2rem}
+        .vision-card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:12px;padding:1.8rem;display:flex;gap:1.2rem;align-items:flex-start;transition:all .35s}
+        .vision-card:hover{border-color:var(--border-hover)}
+        .vision-card-icon{min-width:42px;height:42px;border-radius:8px;background:var(--teal-glow);display:flex;align-items:center;justify-content:center}
+        .vision-card-icon svg{width:20px;height:20px;stroke:var(--teal);fill:none;stroke-width:1.5}
+        .vision-card h4{font-size:1rem;margin-bottom:.4rem}
+        .vision-card p{font-size:.88rem;color:var(--text-dim);margin-bottom:0}
+
+        .events-header{text-align:center;max-width:600px;margin:0 auto 4rem}
+        .events-header h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:1rem}
+        .events-timeline{position:relative;max-width:800px;margin:0 auto}
+        .events-timeline::before{content:'';position:absolute;left:24px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,var(--teal-glow),var(--gold-glow),transparent)}
+        .event-item{display:flex;gap:2rem;padding:2rem 0;position:relative}
+        .event-dot{min-width:48px;height:48px;border-radius:50%;background:var(--bg-elevated);border:2px solid var(--teal-dim);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:700;font-size:.85rem;color:var(--teal);position:relative;z-index:1;transition:all .3s}
+        .event-item:hover .event-dot{background:var(--teal);color:var(--bg-deep);box-shadow:0 0 20px rgba(20,184,166,.3)}
+        .event-body{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:12px;padding:1.8rem;flex:1;transition:all .35s}
+        .event-item:hover .event-body{border-color:var(--border-hover)}
+        .event-freq{font-size:.68rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+        .event-body h4{font-size:1.15rem;margin-bottom:.5rem}
+        .event-body p{font-size:.88rem;color:var(--text-dim)}
+
+        .hierarchy{background:var(--bg-base)}
+        .hierarchy-layout{display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:center}
+        .hierarchy-content h2{font-size:clamp(2rem,3.5vw,2.6rem);margin-bottom:1.2rem}
+        .hierarchy-content>p{font-size:1rem;margin-bottom:2.5rem}
+        .hierarchy-stack{display:flex;flex-direction:column;gap:1rem}
+        .hierarchy-tier{display:flex;align-items:center;gap:1.2rem;padding:1.5rem;background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:12px;transition:all .35s}
+        .hierarchy-tier:hover{border-color:var(--border-hover);transform:translateX(8px)}
+        .tier-badge{min-width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center}
+        .tier-badge svg{width:22px;height:22px;fill:none;stroke-width:1.5}
+        .tier-1 .tier-badge{background:var(--gold-glow)}.tier-1 .tier-badge svg{stroke:var(--gold)}
+        .tier-2 .tier-badge{background:var(--teal-glow)}.tier-2 .tier-badge svg{stroke:var(--teal)}
+        .tier-3 .tier-badge{background:rgba(139,145,158,.1)}.tier-3 .tier-badge svg{stroke:var(--text-secondary)}
+        .tier-info h4{font-size:1rem;margin-bottom:.25rem;font-family:'DM Sans',sans-serif;font-weight:600}
+        .tier-info p{font-size:.82rem;color:var(--text-dim)}
+
+        .mentorship-header{text-align:center;max-width:600px;margin:0 auto 4rem}
+        .mentorship-header h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:1rem}
+        .mentorship-cols{display:grid;grid-template-columns:1fr 1fr;gap:2rem}
+        .mentor-card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:16px;padding:3rem 2.5rem;position:relative;overflow:hidden;transition:all .4s}
+        .mentor-card::after{content:'';position:absolute;bottom:-80px;right:-80px;width:200px;height:200px;border-radius:50%;filter:blur(60px);opacity:.5}
+        .mentor-card.fathers::after{background:rgba(212,168,83,.08)}.mentor-card.sons::after{background:rgba(20,184,166,.08)}
+        .mentor-card:hover{border-color:var(--border-hover);transform:translateY(-4px)}
+        .mentor-card h3{font-size:1.4rem;margin-bottom:.8rem}
+        .mentor-card p{font-size:.95rem;line-height:1.7;position:relative;z-index:1}
+
+        .media{background:var(--bg-base)}
+        .media-layout{display:grid;grid-template-columns:1.1fr 1fr;gap:5rem;align-items:center}
+        .media-content h2{font-size:clamp(2rem,3.5vw,2.6rem);margin-bottom:1.2rem}
+        .media-content>p{font-size:1rem;margin-bottom:2rem}
+        .media-features{display:flex;flex-direction:column;gap:1.2rem}
+        .media-feat{display:flex;gap:1rem;align-items:flex-start}
+        .media-feat-icon{min-width:36px;height:36px;border-radius:8px;background:var(--teal-glow);display:flex;align-items:center;justify-content:center}
+        .media-feat-icon svg{width:18px;height:18px;stroke:var(--teal);fill:none;stroke-width:1.5}
+        .media-feat h4{font-size:.9rem;font-family:'DM Sans',sans-serif;font-weight:600;color:var(--cream);margin-bottom:.2rem}
+        .media-feat p{font-size:.82rem;color:var(--text-dim)}
+        .media-visual{background:var(--glass);border:1px solid var(--glass-border);border-radius:16px;padding:2.5rem;position:relative;overflow:hidden}
+        .media-visual::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:conic-gradient(from 180deg,transparent,rgba(20,184,166,.03),transparent 30%);animation:gradient-shift 12s linear infinite}
+        .media-visual-inner{position:relative;z-index:1}
+        .media-visual h3{font-size:1.6rem;margin-bottom:.6rem}
+        .tag{display:inline-block;padding:.3rem .8rem;background:var(--teal-glow);color:var(--teal);font-size:.68rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;border-radius:4px;margin-bottom:1.5rem}
+
+        .join-section{padding:10rem 0;position:relative;overflow:hidden;text-align:center}
+
+        .find-circles{background:var(--bg-base);position:relative;overflow:hidden}
+        .find-circles::before{content:'';position:absolute;bottom:0;right:0;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(20,184,166,.04),transparent 70%);filter:blur(80px)}
+        .find-header{text-align:center;max-width:640px;margin:0 auto 3.5rem}
+        .find-header h2{font-size:clamp(2rem,4vw,3rem);margin-bottom:1rem}
+        .find-header p{font-size:1rem}
+        .find-search{max-width:560px;margin:0 auto 3.5rem;position:relative}
+        .find-search-inner{display:flex;gap:.6rem;background:var(--bg-elevated);border:1px solid var(--glass-border);border-radius:10px;padding:.5rem;transition:border-color .3s}
+        .find-search-inner:focus-within{border-color:var(--teal-dim)}
+        .find-search-icon{min-width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+        .find-search-icon svg{width:20px;height:20px;stroke:var(--text-dim);fill:none;stroke-width:1.5}
+        .find-search input{flex:1;background:none;border:none;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none}
+        .find-search input::placeholder{color:var(--text-dim)}
+        .find-search button{padding:.7rem 1.8rem;background:var(--teal);border:none;border-radius:6px;color:var(--bg-deep);font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .35s;white-space:nowrap}
+        .find-search button:hover{background:var(--teal-light);box-shadow:0 4px 20px rgba(20,184,166,.25)}
+        .circles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+        .circle-card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--glass-border);border-radius:12px;padding:1.8rem;position:relative;transition:all .4s}
+        .circle-card:hover{border-color:var(--border-hover);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.3)}
+        .circle-card-status{position:absolute;top:1.5rem;right:1.5rem;display:flex;align-items:center;gap:.4rem;font-size:.68rem;font-weight:600;letter-spacing:.05em}
+        .circle-card-status.open{color:#34D399}
+        .circle-card-status.full{color:var(--gold)}
+        .circle-status-dot{width:6px;height:6px;border-radius:50%}
+        .open .circle-status-dot{background:#34D399}
+        .full .circle-status-dot{background:var(--gold)}
+        .circle-city{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;color:var(--cream);margin-bottom:.15rem}
+        .circle-region{font-size:.78rem;color:var(--text-dim);margin-bottom:1.2rem}
+        .circle-details{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1.5rem}
+        .circle-detail{display:flex;align-items:center;gap:.6rem;font-size:.82rem;color:var(--text-secondary)}
+        .circle-detail svg{width:16px;height:16px;stroke:var(--teal-dim);fill:none;stroke-width:1.5;min-width:16px}
+        .circle-join-btn{display:block;width:100%;padding:.65rem;background:transparent;border:1px solid var(--border);border-radius:6px;color:var(--text-secondary);font-family:'DM Sans',sans-serif;font-size:.75rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .3s;text-align:center}
+        .circle-join-btn:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-glow)}
+        .find-cta{text-align:center;margin-top:3rem}
+        .find-cta p{font-size:.9rem;color:var(--text-dim)}
+        .find-cta a{color:var(--teal);text-decoration:none;font-weight:600;transition:color .2s}
+        .find-cta a:hover{color:var(--teal-light)}
+        .join-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 50%,rgba(20,184,166,.06),transparent),radial-gradient(ellipse 40% 60% at 30% 70%,rgba(212,168,83,.04),transparent),var(--bg-base)}
+        .join-inner{position:relative;z-index:1}
+        .join-inner h2{font-size:clamp(2.5rem,5vw,4rem);margin-bottom:1.5rem;line-height:1.1}
+        .join-inner>p{font-size:1.1rem;max-width:540px;margin:0 auto 3rem}
+        .join-form{display:flex;max-width:520px;margin:0 auto;gap:.8rem}
+        .join-form input{flex:1;padding:.9rem 1.4rem;background:var(--bg-elevated);border:1px solid var(--border);border-radius:6px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:.9rem;outline:none;transition:border-color .3s}
+        .join-form input::placeholder{color:var(--text-dim)}
+        .join-form input:focus{border-color:var(--teal-dim)}
+        .join-form button{padding:.9rem 2rem;background:var(--teal);border:none;border-radius:6px;color:var(--bg-deep);font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:all .35s;white-space:nowrap}
+        .join-form button:hover{background:var(--teal-light);box-shadow:0 8px 28px rgba(20,184,166,.3)}
+        .join-tagline{margin-top:4rem;font-family:'Playfair Display',serif;font-style:italic;font-size:1.3rem;color:var(--gold-dim)}
+
+        footer{padding:4rem 0 2.5rem;border-top:1px solid var(--border)}
+        .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:4rem}
+        .footer-brand h3{font-size:1.2rem;margin-bottom:.8rem}
+        .footer-brand p{font-size:.85rem;color:var(--text-dim);max-width:280px;line-height:1.7}
+        .footer-col h4{font-family:'DM Sans',sans-serif;font-size:.72rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--text-secondary);margin-bottom:1.2rem}
+        .footer-col a{display:block;color:var(--text-dim);text-decoration:none;font-size:.88rem;padding:.35rem 0;transition:color .2s}
+        .footer-col a:hover{color:var(--teal)}
+        .footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:2rem;border-top:1px solid var(--border);font-size:.78rem;color:var(--text-dim)}
+        .sep{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:0 auto;max-width:1200px}
+
+        @media(max-width:1024px){.pillars-grid{grid-template-columns:repeat(3,1fr)}.hierarchy-layout,.media-layout,.vision-grid{grid-template-columns:1fr;gap:3rem}.circles-grid{grid-template-columns:repeat(2,1fr)}.footer-grid{grid-template-columns:1fr 1fr}}
+        @media(max-width:768px){
+            nav{padding:0 1.5rem}.nav-links,.nav-cta-btn{display:none}.mobile-toggle{display:block}
+            .mobile-toggle.open span:nth-child(1){transform:rotate(45deg) translate(4px,4px)}.mobile-toggle.open span:nth-child(2){opacity:0}.mobile-toggle.open span:nth-child(3){transform:rotate(-45deg) translate(4px,-4px)}
+            .mobile-nav{position:fixed;top:72px;left:0;right:0;bottom:0;background:rgba(8,9,13,.97);backdrop-filter:blur(30px);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2rem;transform:translateY(-100%);opacity:0;transition:all .4s;pointer-events:none}
+            .mobile-nav.open{transform:translateY(0);opacity:1;pointer-events:all}
+            .mobile-nav a{color:var(--cream);text-decoration:none;font-size:1.1rem;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+            .container{padding:0 1.2rem}.section{padding:5rem 0}
+            .mandate-grid{grid-template-columns:1fr}.pillars-grid{grid-template-columns:repeat(2,1fr)}.pillars-header{flex-direction:column;align-items:flex-start}.pillars-header p{text-align:left}
+            .mentorship-cols{grid-template-columns:1fr}.join-form{flex-direction:column}.circles-grid{grid-template-columns:1fr}.footer-grid{grid-template-columns:1fr;gap:2rem}
+        }
+        @media(max-width:480px){.pillars-grid{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+    <nav id="mainNav">
+        <a href="#" class="nav-brand"><div class="nav-logo">CM</div><span class="nav-brand-text">The Chambers</span></a>
+        <ul class="nav-links">
+            <li><a href="#mandate">Mandate</a></li><li><a href="#pillars">Pillars</a></li><li><a href="#vision">Vision</a></li><li><a href="#events">Events</a></li><li><a href="#structure">Structure</a></li><li><a href="#find">Find a Circle</a></li><li><a href="#media">Media</a></li>
+        </ul>
+        <a href="#join" class="nav-cta-btn">Join Us</a>
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </nav>
+    <div class="mobile-nav" id="mobileNav">
+        <a href="#mandate" onclick="closeMobile()">Mandate</a><a href="#pillars" onclick="closeMobile()">Pillars</a><a href="#vision" onclick="closeMobile()">Vision</a><a href="#events" onclick="closeMobile()">Events</a><a href="#structure" onclick="closeMobile()">Structure</a><a href="#find" onclick="closeMobile()">Find a Circle</a><a href="#media" onclick="closeMobile()">Media</a><a href="#join" onclick="closeMobile()" class="nav-cta-btn" style="margin:0">Join Us</a>
+    </div>
+
+    <section class="hero">
+        <div class="hero-bg"></div><div class="hero-lines"></div><div class="hero-orb hero-orb-1"></div><div class="hero-orb hero-orb-2"></div>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-eyebrow reveal">Restoring Men to the Image of God</div>
+                <h1 class="reveal reveal-delay-1">The Chambers<br><span class="line-2">of Men</span></h1>
+                <p class="hero-sub reveal reveal-delay-2">A movement focused on restoring men to the image of God through structured leadership, doctrinal purity, and strategic deployment into every sphere of influence.</p>
+                <div class="hero-actions reveal reveal-delay-3">
+                    <a href="#join" class="btn-primary">Enter the Chambers <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+                    <a href="#mandate" class="btn-ghost">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="sep"></div>
+
+    <section class="section mandate" id="mandate">
+        <div class="container">
+            <div class="mandate-header">
+                <div class="eyebrow reveal" style="justify-content:center">The Mandate</div>
+                <h2 class="reveal reveal-delay-1">Awaken. Equip. <span class="at">Deploy.</span></h2>
+                <p class="reveal reveal-delay-2">Every man enters a process: roused from passivity, forged by truth, and commissioned to impact.</p>
+            </div>
+            <div class="mandate-grid">
+                <div class="mandate-card reveal"><div class="mandate-num">01</div><div class="mandate-icon"><svg viewBox="0 0 24 24"><path d="M12 3v18M5.5 8.5l13 7M5.5 15.5l13-7"/></svg></div><h3>Awaken</h3><p>Rouse men from spiritual slumber through the compelling truth of the Word and the collective witness of the brotherhood.</p></div>
+                <div class="mandate-card reveal reveal-delay-1"><div class="mandate-num">02</div><div class="mandate-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><h3>Equip</h3><p>Provide rigorous curriculum and structured environments for growth, ensuring every man is trained for Kingdom impact.</p></div>
+                <div class="mandate-card reveal reveal-delay-2"><div class="mandate-num">03</div><div class="mandate-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.2 4.2l2.8 2.8M17 17l2.8 2.8M1 12h4M19 12h4M4.2 19.8l2.8-2.8M17 7l2.8-2.8"/></svg></div><h3>Deploy</h3><p>Commission men back into their spheres (family, work, society) as representatives of the Kingdom with purpose and authority.</p></div>
+            </div>
+        </div>
+    </section>
+    <div class="sep"></div>
+
+    <section class="section" id="pillars">
+        <div class="container">
+            <div class="pillars-header"><div><div class="eyebrow reveal">Foundation</div><h2 class="reveal reveal-delay-1">The Five <span class="at">Pillars</span></h2></div><p class="reveal reveal-delay-2">Each pillar represents a non-negotiable dimension of the Chambers' formation process.</p></div>
+            <div class="pillars-grid">
+                <div class="pillar-card reveal"><div class="pillar-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h4>Spiritual<br>Strength</h4><p>Deep discipleship, intercession, and personal purity.</p><span class="pillar-verse">Ephesians 6:10</span></div>
+                <div class="pillar-card reveal reveal-delay-1"><div class="pillar-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div><h4>Family<br>Leadership</h4><p>Biblical training on fatherhood, marriage, and emotional intelligence.</p><span class="pillar-verse">1 Timothy 3:4</span></div>
+                <div class="pillar-card reveal reveal-delay-2"><div class="pillar-icon"><svg viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div><h4>Personal<br>Development</h4><p>Intentional growth in wisdom, discipline, and professional excellence.</p><span class="pillar-verse">Luke 2:52</span></div>
+                <div class="pillar-card reveal reveal-delay-3"><div class="pillar-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><h4>Brotherhood &<br>Accountability</h4><p>Structured hierarchy where every man is linked for support and correction.</p><span class="pillar-verse">Proverbs 27:17</span></div>
+                <div class="pillar-card reveal reveal-delay-4"><div class="pillar-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div><h4>Kingdom<br>Influence</h4><p>Strategic deployment into society to exercise godly authority.</p><span class="pillar-verse">Matthew 5:14</span></div>
+            </div>
+        </div>
+    </section>
+    <div class="sep"></div>
+
+    <section class="section vision" id="vision">
+        <div class="container">
+            <div class="vision-grid">
+                <div class="vision-content">
+                    <div class="eyebrow reveal">The Vision</div>
+                    <h2 class="reveal reveal-delay-1">Restoration &<br><span class="gt">Rebuilding</span></h2>
+                    <p class="reveal reveal-delay-2">Men being restored to the image of God through intentional discipleship and spiritual renewal. Establishing a multigenerational blueprint for manhood that reinforces godly traits through communal authority and mentorship.</p>
+                    <p class="reveal reveal-delay-3" style="font-style:italic;color:var(--gold-dim);font-family:'Playfair Display',serif">"A worldwide network of Kings and Priests, unified in mission, accountable to the brotherhood, equipped to impact society."</p>
+                </div>
+                <div class="vision-cards">
+                    <div class="vision-card reveal"><div class="vision-card-icon"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></div><div><h4>Restoration</h4><p>Intentional discipleship bringing men back to their God-designed identity.</p></div></div>
+                    <div class="vision-card reveal reveal-delay-1"><div class="vision-card-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3l-4 4-4-4"/></svg></div><div><h4>Rebuilding</h4><p>A multigenerational blueprint reinforcing godly traits through communal authority.</p></div></div>
+                    <div class="vision-card reveal reveal-delay-2"><div class="vision-card-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div><h4>Desired Outcome</h4><p>Kings and Priests unified, accountable, and equipped to transform every sphere.</p></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="sep"></div>
+
+    <section class="section" id="events">
+        <div class="container">
+            <div class="events-header"><div class="eyebrow reveal" style="justify-content:center">Gatherings</div><h2 class="reveal reveal-delay-1">Event <span class="at">Strategy</span></h2><p class="reveal reveal-delay-2">Structured rhythms that fuel the movement and sharpen every man in the brotherhood.</p></div>
+            <div class="events-timeline">
+                <div class="event-item reveal"><div class="event-dot">1</div><div class="event-body"><div class="event-freq">The Launch</div><h4>"Men Reborn"</h4><p>High-intensity launch weekend to formally induct men and assign them to Iron Circles.</p></div></div>
+                <div class="event-item reveal reveal-delay-1"><div class="event-dot">2</div><div class="event-body"><div class="event-freq">Monthly</div><h4>"Man at the Altar"</h4><p>All-night prayer and worship, the engines of the movement, focused on corporate intercession and spiritual warfare.</p></div></div>
+                <div class="event-item reveal reveal-delay-2"><div class="event-dot">3</div><div class="event-body"><div class="event-freq">Bi-Annual</div><h4>Leadership Summits</h4><p>Intensive training for those leading local Chambers or Iron Circles, ensuring alignment and strategic clarity.</p></div></div>
+                <div class="event-item reveal reveal-delay-3"><div class="event-dot">4</div><div class="event-body"><div class="event-freq">Annual</div><h4>Gathering of the Chambers</h4><p>The definitive conference where men from all Chambers unite for vision casting and collective commissioning.</p></div></div>
+            </div>
+        </div>
+    </section>
+    <div class="sep"></div>
+
+    <section class="section" id="structure" style="background:var(--bg-base)">
+        <div class="container">
+            <div class="hierarchy-layout">
+                <div class="hierarchy-content"><div class="eyebrow reveal">Leadership</div><h2 class="reveal reveal-delay-1">The Iron Chain <span class="gt">Hierarchy</span></h2><p class="reveal reveal-delay-2">Structure is the backbone that allows the movement to scale without losing its core identity. Every man is connected, accountable, and growing.</p></div>
+                <div class="hierarchy-stack">
+                    <div class="hierarchy-tier tier-1 reveal"><div class="tier-badge"><svg viewBox="0 0 24 24"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg></div><div class="tier-info"><h4>The Council of Elders</h4><p>Governing body providing spiritual oversight, doctrinal purity, and strategic direction.</p></div></div>
+                    <div class="hierarchy-tier tier-2 reveal reveal-delay-1"><div class="tier-badge"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div><div class="tier-info"><h4>Chamber Leads</h4><p>Men appointed to oversee specific local or regional Chambers, ensuring alignment.</p></div></div>
+                    <div class="hierarchy-tier tier-3 reveal reveal-delay-2"><div class="tier-badge"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.2 4.2l2.8 2.8M17 17l2.8 2.8M1 12h4M19 12h4"/></svg></div><div class="tier-info"><h4>Iron Circles</h4><p>Groups of 3-5 men meeting weekly for accountability, led by a designated Circle Leader.</p></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="sep"></div>
+
+    <section class="section">
+        <div class="container">
+            <div class="mentorship-header"><div class="eyebrow reveal" style="justify-content:center">Pipeline</div><h2 class="reveal reveal-delay-1">The Mentorship <span class="at">Pipeline</span></h2></div>
+            <div class="mentorship-cols">
+                <div class="mentor-card fathers reveal"><div class="eyebrow" style="color:var(--gold)">Senior Tier</div><h3>Fathers of <span class="gt">the Faith</span></h3><p>An elite group of older, proven men providing high-level mentorship to the leadership core. Their decades of faithfulness become the fuel for the next generation's fire.</p></div>
+                <div class="mentor-card sons reveal reveal-delay-1"><div class="eyebrow">Rising Tier</div><h3>Sons of <span class="at">the Chambers</span></h3><p>The discipleship pipeline for young men, ensuring the movement's values pass with integrity to the next generation. Every son becomes a future father.</p></div>
+            </div>
+        </div>
+    </section>
+    <div class="sep"></div>
+
+    <section class="section media" id="media">
+        <div class="container">
+            <div class="media-layout">
+                <div class="media-content">
+                    <div class="eyebrow reveal">Content Strategy</div>
+                    <h2 class="reveal reveal-delay-1">The Digital <span class="at">Charge</span></h2>
+                    <p class="reveal reveal-delay-2">Strategic digital presence across platforms. Every piece of content serves as briefing material for men's lives.</p>
+                    <div class="media-features">
+                        <div class="media-feat reveal"><div class="media-feat-icon"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div><div><h4>Testimony Reels</h4><p>60-second raw, high-impact stories of restoration. Focus on the process, not the person.</p></div></div>
+                        <div class="media-feat reveal reveal-delay-1"><div class="media-feat-icon"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div><div><h4>Chamber Doctrine</h4><p>30-second rapid-fire "Principles of the Chambers": non-negotiable laws for godly living.</p></div></div>
+                        <div class="media-feat reveal reveal-delay-2"><div class="media-feat-icon"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><div><h4>Brotherhood Clips</h4><p>15-30 second moments from gatherings, worship, and all-night prayers.</p></div></div>
+                    </div>
+                </div>
+                <div class="media-visual reveal">
+                    <div class="media-visual-inner">
+                        <div class="tag">Podcast & YouTube</div>
+                        <h3>"Word from<br>the Chambers"</h3>
+                        <p style="margin-top:1.2rem">Panel discussions and deep-dive interviews extracting actionable intelligence for immediate application. Every episode serves as briefing material for men's lives.</p>
+                        <div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap">
+                            <span style="padding:.35rem .8rem;background:var(--gold-glow);color:var(--gold);font-size:.72rem;font-weight:500;border-radius:4px">Fathers of the Faith Series</span>
+                            <span style="padding:.35rem .8rem;background:var(--teal-glow);color:var(--teal);font-size:.72rem;font-weight:500;border-radius:4px">Industrial Aesthetic</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <div class="sep"></div>
+
+    <section class="section find-circles" id="find">
+        <div class="container">
+            <div class="find-header">
+                <div class="eyebrow reveal" style="justify-content:center">Connect Locally</div>
+                <h2 class="reveal reveal-delay-1">Find an Iron Circle <span class="at">Near You</span></h2>
+                <p class="reveal reveal-delay-2">Iron Circles are the heartbeat of the movement. Find a group of brothers in your area and take the first step into accountability, growth, and purpose.</p>
+            </div>
+            <div class="find-search reveal">
+                <div class="find-search-inner">
+                    <div class="find-search-icon"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+                    <input type="text" id="circleSearch" placeholder="Enter your city or postcode...">
+                    <button onclick="searchCircles()">Search</button>
+                </div>
+            </div>
+            <div class="circles-grid" id="circlesGrid">
+                <div class="circle-card reveal">
+                    <div class="circle-card-status open"><div class="circle-status-dot"></div>Accepting Members</div>
+                    <div class="circle-city">London</div>
+                    <div class="circle-region">South East, United Kingdom</div>
+                    <div class="circle-details">
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Led by Brother Marcus T.</div>
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Tuesdays, 7:00 PM</div>
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>3 of 5 brothers</div>
+                    </div>
+                    <button class="circle-join-btn" onclick="requestCircle(this)">Request to Join</button>
+                </div>
+                <div class="circle-card reveal reveal-delay-1">
+                    <div class="circle-card-status open"><div class="circle-status-dot"></div>Accepting Members</div>
+                    <div class="circle-city">Birmingham</div>
+                    <div class="circle-region">West Midlands, United Kingdom</div>
+                    <div class="circle-details">
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Led by Brother David K.</div>
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Thursdays, 6:30 PM</div>
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>4 of 5 brothers</div>
+                    </div>
+                    <button class="circle-join-btn" onclick="requestCircle(this)">Request to Join</button>
+                </div>
+                <div class="circle-card reveal reveal-delay-2">
+                    <div class="circle-card-status full"><div class="circle-status-dot"></div>Waitlist Open</div>
+                    <div class="circle-city">Manchester</div>
+                    <div class="circle-region">North West, United Kingdom</div>
+                    <div class="circle-details">
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Led by Brother Emmanuel A.</div>
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Wednesdays, 7:30 PM</div>
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>5 of 5 brothers</div>
+                    </div>
+                    <button class="circle-join-btn" onclick="requestCircle(this)">Join Waitlist</button>
+                </div>
+                <div class="circle-card reveal">
+                    <div class="circle-card-status open"><div class="circle-status-dot"></div>Accepting Members</div>
+                    <div class="circle-city">Leeds</div>
+                    <div class="circle-region">Yorkshire, United Kingdom</div>
+                    <div class="circle-details">
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Led by Brother Samuel J.</div>
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Saturdays, 9:00 AM</div>
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>2 of 5 brothers</div>
+                    </div>
+                    <button class="circle-join-btn" onclick="requestCircle(this)">Request to Join</button>
+                </div>
+                <div class="circle-card reveal reveal-delay-1">
+                    <div class="circle-card-status open"><div class="circle-status-dot"></div>Accepting Members</div>
+                    <div class="circle-city">Bristol</div>
+                    <div class="circle-region">South West, United Kingdom</div>
+                    <div class="circle-details">
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Led by Brother Nathan O.</div>
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Mondays, 7:00 PM</div>
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>3 of 5 brothers</div>
+                    </div>
+                    <button class="circle-join-btn" onclick="requestCircle(this)">Request to Join</button>
+                </div>
+                <div class="circle-card reveal reveal-delay-2">
+                    <div class="circle-card-status open"><div class="circle-status-dot"></div>Accepting Members</div>
+                    <div class="circle-city">Glasgow</div>
+                    <div class="circle-region">Scotland, United Kingdom</div>
+                    <div class="circle-details">
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Led by Brother Caleb R.</div>
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Fridays, 6:00 PM</div>
+                        <div class="circle-detail"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>3 of 5 brothers</div>
+                    </div>
+                    <button class="circle-join-btn" onclick="requestCircle(this)">Request to Join</button>
+                </div>
+            </div>
+            <div class="find-cta reveal">
+                <p>Don't see a circle in your area? <a href="#join">Register your interest</a> and we will connect you as we expand across the US and globally.</p>
+            </div>
+        </div>
+    </section>
+    <div class="sep"></div>
+
+    <section class="join-section" id="join">
+        <div class="container"><div class="join-inner">
+            <div class="eyebrow reveal" style="justify-content:center">Take the Step</div>
+            <h2 class="reveal reveal-delay-1">Enter the<br><span class="at">Chambers</span></h2>
+            <p class="reveal reveal-delay-2">Join a movement of men who refuse to stay asleep. Your brotherhood is waiting.</p>
+            <form class="join-form reveal reveal-delay-3" method="POST" action="{% url 'signup' %}" id="joinForm" onsubmit="handleJoin(event)">
+                {% csrf_token %}
+                <input type="text" name="name" id="joinName" placeholder="Your name" required>
+                <input type="email" name="email" id="joinEmail" placeholder="Your email" required>
+                <button type="submit">Join Now</button>
+            </form>
+            {% if messages %}{% for message in messages %}<div style="margin-top:1.5rem;color:var(--teal);font-weight:500">{{ message }}</div>{% endfor %}{% endif %}
+            <div id="joinSuccess" style="display:none;margin-top:1.5rem;color:var(--teal);font-weight:500">Welcome to the Chambers, brother. We will be in touch.</div>
+            <p class="join-tagline reveal reveal-delay-4">Keep climbing, brother.</p>
+        </div></div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand"><h3>The Chambers of Men</h3><p>A movement focused on restoring men to the image of God through structured leadership, doctrinal purity, and strategic deployment.</p></div>
+                <div class="footer-col"><h4>Navigate</h4><a href="#mandate">Mandate</a><a href="#pillars">Pillars</a><a href="#vision">Vision</a><a href="#events">Events</a></div>
+                <div class="footer-col"><h4>Connect</h4><a href="#find">Find a Circle</a><a href="#structure">Structure</a><a href="#media">Media</a><a href="#join">Join</a></div>
+                <div class="footer-col"><h4>Taglines</h4><a href="#" style="color:var(--gold-dim);font-style:italic">"Keep climbing, brother."</a><a href="#" style="color:var(--teal-dim);font-style:italic">"You're not alone, brother."</a></div>
+            </div>
+            <div class="footer-bottom"><span>&copy; 2026 The Chambers of Men. All rights reserved.</span><span style="color:var(--teal-dim)">Awaken. Equip. Deploy.</span></div>
+        </div>
+    </footer>
+
+    <script>
+        const obs=new IntersectionObserver(e=>{e.forEach(el=>{if(el.isIntersecting)el.target.classList.add('visible')})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+        document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+        window.addEventListener('scroll',()=>{document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>60)});
+        const toggle=document.getElementById('mobileToggle'),mobileNav=document.getElementById('mobileNav');
+        toggle.addEventListener('click',()=>{toggle.classList.toggle('open');mobileNav.classList.toggle('open')});
+        function closeMobile(){toggle.classList.remove('open');mobileNav.classList.remove('open')}
+        function handleJoin(e){e.preventDefault();const form=document.getElementById('joinForm');const data=new FormData(form);fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}}).then(r=>r.json()).then(d=>{form.style.display='none';document.getElementById('joinSuccess').style.display='block'}).catch(()=>{form.submit()})}
+        function searchCircles(){const q=document.getElementById('circleSearch').value.trim();if(!q)return;const cards=document.querySelectorAll('.circle-card');let found=false;cards.forEach(c=>{const city=c.querySelector('.circle-city').textContent.toLowerCase();const region=c.querySelector('.circle-region').textContent.toLowerCase();if(city.includes(q.toLowerCase())||region.includes(q.toLowerCase())){c.style.display='';found=true}else{c.style.display='none'}});if(!found){cards.forEach(c=>c.style.display='');alert('No circles found for "'+q+'". Showing all available circles. Register your interest and we will connect you as we expand.')}}
+        document.getElementById('circleSearch').addEventListener('keydown',function(e){if(e.key==='Enter')searchCircles()});
+        function requestCircle(btn){btn.textContent='Request Sent!';btn.style.borderColor='var(--teal)';btn.style.color='var(--teal)';btn.style.background='var(--teal-glow)';btn.disabled=true}
+    </script>
+</body>
+</html>
