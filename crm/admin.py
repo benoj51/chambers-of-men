@@ -15,9 +15,21 @@ from .models import (
 
 
 
+
+
+
+
+
+
+
+
 # ---------------------------------------------------------------------------
 # Existing CRM Admin
 # ---------------------------------------------------------------------------
+
+
+
+
 
 
 
@@ -59,11 +71,27 @@ class MemberAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
+
+
+
+
 @admin.register(Chamber)
 class ChamberAdmin(admin.ModelAdmin):
     list_display = ['name', 'city', 'region', 'chamber_lead']
     search_fields = ['name', 'city']
     list_filter = ['region']
+
+
+
+
+
+
+
+
 
 
 
@@ -83,6 +111,14 @@ class CircleMemberInline(admin.TabularInline):
 
 
 
+
+
+
+
+
+
+
+
 @admin.register(IronCircle)
 class IronCircleAdmin(admin.ModelAdmin):
     list_display = ['name', 'circle_leader', 'chamber', 'meeting_day', 'member_count', 'is_open']
@@ -94,9 +130,21 @@ class IronCircleAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
     def member_count(self, obj):
         return obj.members.count()
     member_count.short_description = 'Members'
+
+
+
+
+
+
+
+
 
 
 
@@ -116,6 +164,14 @@ class EventAttendanceInline(admin.TabularInline):
 
 
 
+
+
+
+
+
+
+
+
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = ['name', 'event_type', 'date', 'location', 'is_published']
@@ -123,6 +179,14 @@ class EventAdmin(admin.ModelAdmin):
     search_fields = ['name', 'location']
     list_editable = ['is_published']
     inlines = [EventAttendanceInline]
+
+
+
+
+
+
+
+
 
 
 
@@ -147,13 +211,25 @@ class BlogPostAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
+
+
+
+
 @admin.register(ContactSubmission)
 class ContactSubmissionAdmin(admin.ModelAdmin):
     list_display = ['name', 'email', 'phone', 'city', 'is_processed', 'created_at']
     list_filter = ['is_processed', 'how_heard']
     search_fields = ['name', 'email']
     list_editable = ['is_processed']
-    readonly_fields = ['assigned_date']
+    readonly_fields = ['created_at']
+
+
+
+
 
 
 
@@ -163,9 +239,17 @@ class ContactSubmissionAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
     def mark_as_processed(self, request, queryset):
         queryset.update(is_processed=True)
     mark_as_processed.short_description = "Mark selected as processed"
+
+
+
+
 
 
 
@@ -199,9 +283,21 @@ class ContactSubmissionAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
+
+
+
+
 # ---------------------------------------------------------------------------
 # Agent Framework Admin
 # ---------------------------------------------------------------------------
+
+
+
+
 
 
 
@@ -223,6 +319,14 @@ class AgentConfigAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+
+
+
+
+
+
+
 
 
 
@@ -261,6 +365,14 @@ class EmailTemplateAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
+
+
+
+
 @admin.register(TaskLog)
 class TaskLogAdmin(admin.ModelAdmin):
     list_display = ['created_at', 'agent_name', 'task_name', 'level_badge', 'member']
@@ -271,6 +383,10 @@ class TaskLogAdmin(admin.ModelAdmin):
         'details', 'created_at'
     ]
     date_hierarchy = 'created_at'
+
+
+
+
 
 
 
@@ -293,14 +409,30 @@ class TaskLogAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
     def has_add_permission(self, request):
         return False
 
 
 
 
+
+
+
+
     def has_change_permission(self, request, obj=None):
         return False
+
+
+
+
+
+
+
+
 
 
 
@@ -324,6 +456,14 @@ class MemberActivityLogAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
+
+
+
+
 @admin.register(AdminFlag)
 class AdminFlagAdmin(admin.ModelAdmin):
     list_display = ['title', 'priority_badge', 'agent_name', 'member', 'is_resolved', 'created_at']
@@ -332,6 +472,10 @@ class AdminFlagAdmin(admin.ModelAdmin):
     list_editable = ['is_resolved']
     readonly_fields = ['created_at']
     actions = ['resolve_flags']
+
+
+
+
 
 
 
@@ -354,6 +498,10 @@ class AdminFlagAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
     def resolve_flags(self, request, queryset):
         from django.utils import timezone
         queryset.update(
@@ -363,6 +511,14 @@ class AdminFlagAdmin(admin.ModelAdmin):
         )
         self.message_user(request, f"{queryset.count()} flag(s) resolved.")
     resolve_flags.short_description = "Resolve selected flags"
+
+
+
+
+
+
+
+
 
 
 
@@ -381,9 +537,21 @@ class SocialMediaPostAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
     def caption_preview(self, obj):
         return obj.content[:80] + '...' if len(obj.content) > 80 else obj.content
     caption_preview.short_description = 'Content'
+
+
+
+
+
+
+
+
 
 
 
@@ -405,6 +573,14 @@ class CircleAssignmentHistoryAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
+
+
+
+
 @admin.register(LeadershipProgression)
 class LeadershipProgressionAdmin(admin.ModelAdmin):
     list_display = ['member', 'from_role', 'to_role', 'status', 'nominated_by', 'created_at']
@@ -413,6 +589,10 @@ class LeadershipProgressionAdmin(admin.ModelAdmin):
     list_editable = ['status']
     readonly_fields = ['created_at']
     actions = ['approve_progressions']
+
+
+
+
 
 
 
@@ -430,6 +610,14 @@ class LeadershipProgressionAdmin(admin.ModelAdmin):
             member.save(update_fields=['role', 'updated_at'])
         self.message_user(request, f"{queryset.count()} progression(s) approved and roles updated.")
     approve_progressions.short_description = "Approve selected and update member roles"
+
+
+
+
+
+
+
+
 
 
 
