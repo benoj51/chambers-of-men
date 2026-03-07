@@ -186,12 +186,12 @@ class EmailTemplateAdmin(admin.ModelAdmin):
 
 @admin.register(TaskLog)
 class TaskLogAdmin(admin.ModelAdmin):
-    list_display = ['created_at', 'agent_name', 'action', 'level_badge', 'member', 'email_sent_to']
+    list_display = ['created_at', 'agent_name', 'task_name', 'level_badge', 'member']
     list_filter = ['agent_name', 'level', 'created_at']
-    search_fields = ['action', 'detail', 'email_sent_to']
+    search_fields = ['task_name', 'message']
     readonly_fields = [
-        'agent_name', 'action', 'detail', 'level', 'member',
-        'email_sent_to', 'template_used', 'created_at'
+        'agent_name', 'task_name', 'message', 'level', 'member',
+        'details', 'created_at'
     ]
     date_hierarchy = 'created_at'
 
