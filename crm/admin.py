@@ -9,17 +9,20 @@ from .models import (
 )
 
 
+
+
 # ---------------------------------------------------------------------------
 # Existing CRM Admin
 # ---------------------------------------------------------------------------
+
 
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
     list_display = [
         'first_name', 'last_name', 'email', 'status', 'role',
-        'onboarding_status', 'city', 'date_joined'
+        'onboarding_step', 'city', 'date_joined'
     ]
-    list_filter = ['status', 'role', 'onboarding_status', 'how_heard', 'chamber']
+    list_filter = ['status', 'role', 'onboarding_step', 'how_heard', 'chamber']
     search_fields = ['first_name', 'last_name', 'email', 'phone', 'city']
     list_editable = ['status', 'role']
     readonly_fields = ['created_at', 'updated_at']
@@ -31,7 +34,7 @@ class MemberAdmin(admin.ModelAdmin):
             'fields': ('status', 'role', 'chamber', 'date_joined', 'how_heard', 'church_membership_years')
         }),
         ('Onboarding & Engagement', {
-            'fields': ('onboarding_status', 'interview_scheduled_date', 'last_engagement_date'),
+            'fields': ('onboarding_step', 'interview_date', 'last_activity_date'),
             'description': 'Managed by the Onboarding and CRM Pipeline agents.'
         }),
         ('Additional', {
@@ -44,6 +47,8 @@ class MemberAdmin(admin.ModelAdmin):
     )
 
 
+
+
 @admin.register(Chamber)
 class ChamberAdmin(admin.ModelAdmin):
     list_display = ['name', 'city', 'region', 'chamber_lead']
@@ -51,9 +56,13 @@ class ChamberAdmin(admin.ModelAdmin):
     list_filter = ['region']
 
 
+
+
 class CircleMemberInline(admin.TabularInline):
     model = IronCircle.members.through
     extra = 1
+
+
 
 
 @admin.register(IronCircle)
@@ -64,14 +73,19 @@ class IronCircleAdmin(admin.ModelAdmin):
     inlines = [CircleMemberInline]
     exclude = ['members']
 
+
     def member_count(self, obj):
         return obj.members.count()
     member_count.short_description = 'Members'
 
 
+
+
 class EventAttendanceInline(admin.TabularInline):
     model = EventAttendance
     extra = 1
+
+
 
 
 @admin.register(Event)
@@ -81,6 +95,8 @@ class EventAdmin(admin.ModelAdmin):
     search_fields = ['name', 'location']
     list_editable = ['is_published']
     inlines = [EventAttendanceInline]
+
+
 
 
 @admin.register(BlogPost)
@@ -93,6 +109,8 @@ class BlogPostAdmin(admin.ModelAdmin):
     readonly_fields = ['created_at', 'updated_at']
 
 
+
+
 @admin.register(ContactSubmission)
 class ContactSubmissionAdmin(admin.ModelAdmin):
     list_display = ['name', 'email', 'phone', 'city', 'is_processed', 'created_at']
@@ -101,11 +119,14 @@ class ContactSubmissionAdmin(admin.ModelAdmin):
     list_editable = ['is_processed']
     readonly_fields = ['created_at']
 
+
     actions = ['mark_as_processed', 'create_member_from_submission']
+
 
     def mark_as_processed(self, request, queryset):
         queryset.update(is_processed=True)
     mark_as_processed.short_description = "Mark selected as processed"
+
 
     def create_member_from_submission(self, request, queryset):
         created = 0
@@ -130,9 +151,12 @@ class ContactSubmissionAdmin(admin.ModelAdmin):
     create_member_from_submission.short_description = "Create member records from selected"
 
 
+
+
 # ---------------------------------------------------------------------------
 # Agent Framework Admin
 # ---------------------------------------------------------------------------
+
 
 @admin.register(AgentConfig)
 class AgentConfigAdmin(admin.ModelAdmin):
@@ -153,6 +177,8 @@ class AgentConfigAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+
 
 
 @admin.register(EmailTemplate)
@@ -184,6 +210,8 @@ class EmailTemplateAdmin(admin.ModelAdmin):
     )
 
 
+
+
 @admin.register(TaskLog)
 class TaskLogAdmin(admin.ModelAdmin):
     list_display = ['created_at', 'agent_name', 'task_name', 'level_badge', 'member']
@@ -194,6 +222,7 @@ class TaskLogAdmin(admin.ModelAdmin):
         'details', 'created_at'
     ]
     date_hierarchy = 'created_at'
+
 
     def level_badge(self, obj):
         colours = {
@@ -210,11 +239,15 @@ class TaskLogAdmin(admin.ModelAdmin):
         )
     level_badge.short_description = 'Level'
 
+
     def has_add_permission(self, request):
         return False
 
+
     def has_change_permission(self, request, obj=None):
         return False
+
+
 
 
 @admin.register(MemberActivityLog)
@@ -226,6 +259,8 @@ class MemberActivityLogAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
 
 
+
+
 @admin.register(AdminFlag)
 class AdminFlagAdmin(admin.ModelAdmin):
     list_display = ['title', 'flag_type', 'priority_badge', 'agent_name', 'member', 'is_resolved', 'created_at']
@@ -234,6 +269,7 @@ class AdminFlagAdmin(admin.ModelAdmin):
     list_editable = ['is_resolved']
     readonly_fields = ['created_at']
     actions = ['resolve_flags']
+
 
     def priority_badge(self, obj):
         colours = {
@@ -250,6 +286,7 @@ class AdminFlagAdmin(admin.ModelAdmin):
         )
     priority_badge.short_description = 'Priority'
 
+
     def resolve_flags(self, request, queryset):
         from django.utils import timezone
         queryset.update(
@@ -261,40 +298,48 @@ class AdminFlagAdmin(admin.ModelAdmin):
     resolve_flags.short_description = "Resolve selected flags"
 
 
+
+
 @admin.register(SocialMediaPost)
 class SocialMediaPostAdmin(admin.ModelAdmin):
-    list_display = ['platform', 'caption_preview', 'blog_post', 'status', 'scheduled_for']
+    list_display = ['platform', 'caption_preview', 'content', 'status', 'scheduled_for']
     list_filter = ['platform', 'status']
-    search_fields = ['caption']
+    search_fields = ['content']
     list_editable = ['status']
 
+
     def caption_preview(self, obj):
-        return obj.caption[:80] + '...' if len(obj.caption) > 80 else obj.caption
-    caption_preview.short_description = 'Caption'
+        return obj.content[:80] + '...' if len(obj.content) > 80 else obj.content
+    caption_preview.short_description = 'Content'
+
+
 
 
 @admin.register(CircleAssignmentHistory)
 class CircleAssignmentHistoryAdmin(admin.ModelAdmin):
-    list_display = ['member', 'circle', 'action', 'performed_by', 'created_at']
-    list_filter = ['action', 'created_at']
+    list_display = ['member', 'circle', 'assigned_date', 'removed_date', 'reason']
+    list_filter = ['assigned_date']
     readonly_fields = ['created_at']
+
+
 
 
 @admin.register(LeadershipProgression)
 class LeadershipProgressionAdmin(admin.ModelAdmin):
-    list_display = ['member', 'from_role', 'to_role', 'is_approved', 'recommended_by', 'created_at']
-    list_filter = ['is_approved', 'to_role']
+    list_display = ['member', 'from_role', 'to_role', 'status', 'nominated_by', 'created_at']
+    list_filter = ['status', 'to_role']
     search_fields = ['member__first_name', 'member__last_name']
-    list_editable = ['is_approved']
+    list_editable = ['status']
     readonly_fields = ['created_at']
     actions = ['approve_progressions']
 
+
     def approve_progressions(self, request, queryset):
         from django.utils import timezone
-        for progression in queryset.filter(is_approved=False):
-            progression.is_approved = True
-            progression.approved_by = request.user.username
-            progression.approved_at = timezone.now()
+        for progression in queryset.filter(status='pending'):
+            progression.status = 'approved'
+            progression.reviewed_by = request.user.username
+            progression.reviewed_at = timezone.now()
             progression.save()
             # Update the member's role
             member = progression.member
@@ -304,7 +349,29 @@ class LeadershipProgressionAdmin(admin.ModelAdmin):
     approve_progressions.short_description = "Approve selected and update member roles"
 
 
+
+
 # Customise the admin site header
 admin.site.site_header = "The Chambers of Men - CRM"
 admin.site.site_title = "TCM Admin"
 admin.site.index_title = "Dashboard"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
