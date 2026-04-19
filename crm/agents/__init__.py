@@ -1,5 +1,5 @@
 """
-The Chambers of Men - Agent Framework
+Chambers of Men - Agent Framework
 ======================================
 
 Automated agents that handle onboarding, CRM pipeline management,

@@ -1,8 +1,8 @@
-# The Chambers of Men
+# Chambers of Men
 
 **Awaken. Equip. Deploy.**
 
-A Django web platform and CRM for The Chambers of Men - a faith-based movement restoring men through structured leadership, discipleship, and strategic deployment.
+A Django web platform and CRM for Chambers of Men - a faith-based movement restoring men through structured leadership, discipleship, and strategic deployment.
 
 ## Tech Stack
 
@@ -94,7 +94,7 @@ Visit:
 ```bash
 git init
 git add .
-git commit -m "Initial commit - The Chambers of Men platform"
+git commit -m "Initial commit - Chambers of Men platform"
 git branch -M main
 git remote add origin https://github.com/YOUR_USERNAME/chambers-of-men.git
 git push -u origin main

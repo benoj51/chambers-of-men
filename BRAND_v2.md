@@ -1,4 +1,4 @@
-# The Chambers of Men — Brand Guidelines v2
+# Chambers of Men — Brand Guidelines v2
 
 **Status:** v2 (supersedes v1 teal/gold palette)
 **Updated:** 2026-04-18
@@ -20,7 +20,7 @@
 
 ## 2. Logo
 
-The Chambers of Men mark is an **organic, hand-drawn "cm" script**. The curves echo rock formations and the contours of ascent. It is not the boxed "CM" placeholder used on v1 of the site — that mark is retired.
+Chambers of Men mark is an **organic, hand-drawn "cm" script**. The curves echo rock formations and the contours of ascent. It is not the boxed "CM" placeholder used on v1 of the site — that mark is retired.
 
 ### Variants
 - **Mark only** — the "cm" script alone. Use in navigation, favicons, and any compact context.
@@ -341,7 +341,7 @@ No spring-heavy motion. No parallax. The mood is controlled and quiet, not showy
 - Scripture-integrated where appropriate (Proverbs 27:17, Luke 2:52, Matthew 5:14, 1 Timothy 3:4, Ephesians 6:10)
 - Never corporate, never casual-to-a-fault
 - Opening: "Hi [First Name]," — not "Brother" or "Dear"
-- Closing: "Keep climbing, brother. / Benedict / The Chambers of Men"
+- Closing: "Keep climbing, brother. / Benedict / Chambers of Men"
 - Never use filler ("we're excited", "just wanted to check in")
 
 ---

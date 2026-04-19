@@ -109,7 +109,7 @@ Q_CLUSTER = {
 
 SENDGRID_API_KEY = env('SENDGRID_API_KEY', default='')
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='info@thechamberofmen.com')
-DEFAULT_FROM_NAME = 'The Chambers of Men'
+DEFAULT_FROM_NAME = 'Chambers of Men'
 
 if SENDGRID_API_KEY:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
