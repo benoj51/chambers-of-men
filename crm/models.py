@@ -26,7 +26,7 @@ class Chamber(models.Model):
 
 
 class Member(models.Model):
-    """A member or prospect of The Chambers of Men."""
+    """A member or prospect of Chambers of Men."""
     STATUS_CHOICES = [
         ('prospect', 'Prospect'),
         ('active', 'Active'),

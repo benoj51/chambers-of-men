@@ -627,7 +627,7 @@ class LeadershipProgressionAdmin(admin.ModelAdmin):
 
 
 # Customise the admin site header
-admin.site.site_header = "The Chambers of Men - CRM"
+admin.site.site_header = "Chambers of Men - CRM"
 admin.site.site_title = "TCM Admin"
 admin.site.index_title = "Dashboard"
 
