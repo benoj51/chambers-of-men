@@ -72,3 +72,8 @@ def signup(request):
 def contact(request):
     """Contact page."""
     return render(request, 'website/contact.html')
+
+
+def styleguide(request):
+    """Brand v2 styleguide — live reference for palette, type, components."""
+    return render(request, 'website/styleguide.html')
