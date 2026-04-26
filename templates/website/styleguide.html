@@ -7,7 +7,7 @@
     <meta name="description" content="Live reference for the Chambers of Men v2 brand — palette, type, components, and usage.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..500&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..400&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..500&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..400&family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..900,0..100;1,9..144,300..900,0..100&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
     <style>
         :root{
             --bg-deep:#0B0F14;--bg-base:#11161C;--bg-surface:#181F28;--bg-elevated:#1F2731;
@@ -24,7 +24,7 @@
         html{scroll-behavior:smooth}
         body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg-deep);color:var(--text-secondary);line-height:1.7;-webkit-font-smoothing:antialiased}
         body::after{content:'';position:fixed;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.018'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
-        h1,h2,h3,h4{font-family:'Cormorant Garamond',Georgia,serif;color:var(--cream);line-height:1.15;font-weight:600}
+        h1,h2,h3,h4{font-family:'Newsreader',Georgia,serif;color:var(--cream);line-height:1.15;font-weight:600}
         .at{color:var(--terracotta)}.sg{color:var(--sage)}
 
         .container{max-width:1200px;margin:0 auto;padding:0 2rem}
@@ -32,14 +32,14 @@
         .sg-hero-orb{position:absolute;width:400px;height:400px;border-radius:50%;filter:blur(100px);top:-10%;right:-5%;background:rgba(209,127,86,.08);pointer-events:none}
         .sg-hero-orb2{position:absolute;width:300px;height:300px;border-radius:50%;filter:blur(100px);bottom:-20%;left:-5%;background:rgba(122,152,121,.06);pointer-events:none}
         .sg-hero .eyebrow{margin-bottom:1.5rem}
-        .logo-name,.mandate-num,.event-dot{font-family:'Cormorant Garamond',Georgia,serif}
+        .logo-name,.mandate-num,.event-dot{font-family:'Newsreader',Georgia,serif}
         .logo-mark-live{display:inline-block;width:140px;height:140px;background:currentColor;-webkit-mask:url('../../static/brand/cm-mark-black.png') center/contain no-repeat;mask:url('../../static/brand/cm-mark-black.png') center/contain no-repeat}
         .logo-lockup-live{display:inline-block;width:200px;height:140px;background:currentColor;-webkit-mask:url('../../static/brand/cm-lockup-black.png') center/contain no-repeat;mask:url('../../static/brand/cm-lockup-black.png') center/contain no-repeat}
         .logo-swatches{display:flex;gap:.6rem;margin-top:1.2rem;align-items:center;justify-content:center;flex-wrap:wrap}
         .logo-swatch-btn{width:28px;height:28px;border-radius:50%;border:1px solid var(--border);cursor:pointer;transition:transform .2s}
         .logo-swatch-btn:hover{transform:scale(1.15)}
-        .comp-card h3{font-family:'Cormorant Garamond',serif;font-weight:600}
-        .texture-swatch{font-family:'Cormorant Garamond',serif !important;font-style:italic;font-weight:400}
+        .comp-card h3{font-family:'Newsreader',serif;font-weight:600}
+        .texture-swatch{font-family:'Newsreader',serif !important;font-style:italic;font-weight:400}
         .sg-hero h1{font-size:clamp(2.8rem,5.5vw,4.4rem);font-weight:600;letter-spacing:-.015em;margin-bottom:1.5rem}
         .sg-hero p{max-width:640px;font-size:1.05rem}
         .sg-version{display:inline-flex;gap:.5rem;align-items:center;margin-top:2rem;padding:.4rem .9rem;background:var(--sage-glow);border:1px solid var(--sage-dim);border-radius:4px;color:var(--sage);font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase}
@@ -79,11 +79,11 @@
         .type-meta{font-family:'DM Sans',sans-serif;font-size:.78rem}
         .type-meta strong{display:block;color:var(--cream);font-weight:600;margin-bottom:.3rem}
         .type-meta span{color:var(--text-dim);font-size:.72rem}
-        .type-specimen-h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2.8rem,5vw,4.2rem);font-weight:600;line-height:1.05;color:var(--cream);letter-spacing:-.015em}
-        .type-specimen-h2{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:600;color:var(--cream)}
-        .type-specimen-h3{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;color:var(--cream)}
+        .type-specimen-h1{font-family:'Newsreader',serif;font-size:clamp(2.8rem,5vw,4.2rem);font-weight:600;line-height:1.05;color:var(--cream);letter-spacing:-.015em}
+        .type-specimen-h2{font-family:'Newsreader',serif;font-size:2.4rem;font-weight:600;color:var(--cream)}
+        .type-specimen-h3{font-family:'Newsreader',serif;font-size:1.6rem;font-weight:600;color:var(--cream)}
         .type-specimen-body{font-family:'DM Sans',sans-serif;font-size:1rem;color:var(--text-secondary);line-height:1.7;max-width:560px}
-        .type-specimen-quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:1.45rem;color:var(--sage-dim);max-width:560px;line-height:1.5}
+        .type-specimen-quote{font-family:'Newsreader',serif;font-style:italic;font-weight:400;font-size:1.45rem;color:var(--sage-dim);max-width:560px;line-height:1.5}
 
         /* Components */
         .comp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
@@ -272,9 +272,9 @@
 <section class="section" style="background:var(--bg-base)">
     <div class="container">
         <div class="section-head">
-            <div class="eyebrow">03b &mdash; Font decision pending</div>
-            <h2 style="font-family:'Playfair Display',serif">Which serif matches the <span class="at">mark?</span></h2>
-            <p>Same headline, same pull quote, three serifs. Judge by eye. The organic "cm" mark is warm and hand-drawn — the question is how much warmth the type should meet it with.</p>
+            <div class="eyebrow">03b &mdash; Serif review</div>
+            <h2>Which serif matches the <span class="at">curvature</span> of the mark?</h2>
+            <p>The serif system landed on Newsreader (Option D) after a four-way comparison. The logo's curvature is more pronounced than any Garamond can carry — the mark has zero stroke contrast and bulbous, soft terminals. Newsreader's lower contrast, softer terminals, and flowing italic match the mark while keeping the editorial register. Kept here as a record of the decision.</p>
         </div>
 
         <!-- Option 1: Playfair Display (current) -->
@@ -300,11 +300,11 @@
             <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--terracotta),transparent);border-radius:12px 12px 0 0"></div>
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2rem;gap:2rem;flex-wrap:wrap">
                 <div>
-                    <div style="font:600 .68rem/1 'DM Sans';letter-spacing:.2em;text-transform:uppercase;color:var(--terracotta);margin-bottom:.5rem">Option B &middot; Selected</div>
+                    <div style="font:600 .68rem/1 'DM Sans';letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.5rem">Option B &middot; Considered</div>
                     <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;color:var(--cream);margin-bottom:.3rem">Cormorant Garamond</h3>
-                    <p style="font-size:.82rem;color:var(--text-dim);max-width:380px">Old-style Garamond revival. Leather-bound library, English gentleman's club. Warmer terminals than Playfair — friendlier to the hand-drawn mark without losing club gravitas.</p>
+                    <p style="font-size:.82rem;color:var(--text-dim);max-width:380px">Old-style Garamond revival. Leather-bound library, English gentleman's club. Carried club gravitas but kept too much stroke contrast and too-sharp serifs to match the mark's curvature.</p>
                 </div>
-                <span style="padding:.35rem .8rem;background:var(--terracotta);color:var(--bg-deep);font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;white-space:nowrap">Locked in</span>
+                <span style="padding:.35rem .8rem;background:var(--bg-elevated);color:var(--text-dim);font-size:.68rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;white-space:nowrap;text-decoration:line-through">Superseded</span>
             </div>
             <div style="border-top:1px solid var(--border);padding-top:2rem">
                 <div style="font:600 .7rem/1 'DM Sans';letter-spacing:.25em;text-transform:uppercase;color:var(--terracotta);display:inline-flex;align-items:center;gap:1rem;margin-bottom:1.2rem"><span style="width:32px;height:1px;background:var(--terracotta)"></span>The Mandate</div>
@@ -332,9 +332,28 @@
             </div>
         </div>
 
+        <!-- Option D: Newsreader (new candidate) -->
+        <div style="background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--sage-dim);border-radius:12px;padding:3rem;margin-bottom:1.5rem;position:relative">
+            <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--sage),transparent);border-radius:12px 12px 0 0"></div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2rem;gap:2rem;flex-wrap:wrap">
+                <div>
+                    <div style="font:600 .68rem/1 'DM Sans';letter-spacing:.2em;text-transform:uppercase;color:var(--terracotta);margin-bottom:.5rem">Option D &middot; Selected</div>
+                    <h3 style="font-family:'Newsreader',serif;font-variation-settings:'opsz' 60;font-size:1.7rem;font-weight:600;color:var(--cream);margin-bottom:.3rem">Newsreader</h3>
+                    <p style="font-size:.82rem;color:var(--text-dim);max-width:380px">Production Type, 2020. Designed for screen reading. Lower stroke contrast than any Garamond, softer terminals, optical sizing built in. Sits closer to the hand-drawn curvature of the mark while keeping the editorial register. The italic in particular has a flowing, almost hand-cut quality that echoes the logo.</p>
+                </div>
+                <span style="padding:.35rem .8rem;background:var(--terracotta);color:var(--bg-deep);font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:4px;white-space:nowrap">Locked in</span>
+            </div>
+            <div style="border-top:1px solid var(--border);padding-top:2rem">
+                <div style="font:600 .7rem/1 'DM Sans';letter-spacing:.25em;text-transform:uppercase;color:var(--terracotta);display:inline-flex;align-items:center;gap:1rem;margin-bottom:1.2rem"><span style="width:32px;height:1px;background:var(--terracotta)"></span>The Mandate</div>
+                <div style="font-family:'Newsreader',serif;font-variation-settings:'opsz' 72;font-size:clamp(2.8rem,5.5vw,4.5rem);font-weight:600;color:var(--cream);letter-spacing:-.015em;line-height:1.05;margin-bottom:2rem">Awaken. Equip. <span class="at">Deploy.</span></div>
+                <div style="font-family:'Newsreader',serif;font-variation-settings:'opsz' 36;font-style:italic;font-weight:400;font-size:1.45rem;color:var(--sage-dim);line-height:1.5;max-width:640px;margin-bottom:1rem">&ldquo;A worldwide network of Kings and Priests, unified in mission, accountable to the brotherhood.&rdquo;</div>
+                <div style="font-family:'Newsreader',serif;font-variation-settings:'opsz' 30;font-size:1.6rem;font-weight:600;color:var(--cream)">Brotherhood &amp; Accountability</div>
+            </div>
+        </div>
+
         <div style="margin-top:2.5rem;padding:1.5rem 1.8rem;background:var(--terracotta-glow);border-left:2px solid var(--terracotta);border-radius:0 6px 6px 0">
             <div style="font:600 .7rem/1 'DM Sans';letter-spacing:.25em;text-transform:uppercase;color:var(--terracotta);margin-bottom:.7rem">Decision</div>
-            <p style="color:var(--cream);line-height:1.7"><strong>Cormorant Garamond</strong> is the Chambers of Men v2 serif. Paired with DM Sans. Locked in across <code>BRAND_v2.md</code>, the <code>chambers-v2-design</code> and <code>chambers-v2-deck</code> skills, and the Obsidian mirror.</p>
+            <p style="color:var(--cream);line-height:1.7"><strong>Newsreader</strong> is the Chambers of Men v2 serif. Paired with DM Sans. Locked in across <code>BRAND_v2.md</code>, <code>chambers-v2-design</code>, <code>chambers-v2-deck</code> (deck builder), the Obsidian mirror, and the live site. Lower stroke contrast and softer terminals make it the closest free Google font to the curvature of the "cm" mark.</p>
         </div>
     </div>
 </section>
