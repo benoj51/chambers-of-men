@@ -175,34 +175,35 @@ Inversion is a controlled move. Don't invert digital surfaces without a clear re
 
 ## 4. Typography
 
-Playfair Display (v1) was swapped out in v2. It was a high-contrast Didone — Mayfair formal, Vogue-adjacent — and too cool for the new hand-drawn mark. Cormorant Garamond is the replacement: an old-style Garamond revival that reads like a leather-bound library. It keeps the members-club gravitas while warming the terminals enough to partner the organic "cm" script. DM Sans stays as the body.
+The serif went through two iterations. v1 used Playfair Display — a high-contrast Didone, Mayfair formal, Vogue-adjacent. v2 first moved to Cormorant Garamond (warmer, English-library energy), then re-evaluated against the logo's curvature and landed on **Newsreader**. Cormorant still carried too much stroke contrast and too-sharp serifs to match the mark, which has zero contrast and bulbous, soft terminals. Newsreader is a Production Type release for screen reading: lower contrast, softer terminals, optical sizing, and a flowing italic that genuinely echoes the hand-drawn "cm" script. DM Sans stays as the body.
 
 ### Fonts
-- **Cormorant Garamond** — headings, pull quotes. Weights 300, 400, 500, 600, 700. Italic 300–700.
+- **Newsreader** — headings, pull quotes. Weights 200–800. Italic 200–800. Variable, with an `opsz` (optical size) axis 6–72 — use higher values for display, lower for sub-headings.
 - **DM Sans** — body, eyebrows, UI. Weights 300, 400, 500, 600, 700.
 
 ```html
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..400&display=swap" rel="stylesheet">
 ```
 
 ### Scale
 
-Cormorant Garamond's max weight is 700 (no 800/900). The headline weights below are calibrated to read with the same visual presence as Playfair 800 without over-darkening. Sizes are bumped slightly from v1 because Cormorant's old-style proportions read a touch smaller at the same pt.
+Newsreader's optical size axis (`opsz`) lets the same family carry both display weights and small text. Tune `font-variation-settings: 'opsz' <n>` per role — 72 for hero, 30 for cards, 14 for body if it ever appears.
 
-| Role | Font | Size | Weight | Notes |
-|---|---|---|---|---|
-| Hero H1 | Cormorant Garamond | `clamp(3.2rem, 6.5vw, 5.5rem)` | 600 | letter-spacing -.015em, leading 1.05 |
-| Section H2 | Cormorant Garamond | `clamp(2.2rem, 4.2vw, 3.2rem)` | 600 | leading 1.15 |
-| Card H3 | Cormorant Garamond | 1.6rem | 600 | — |
-| Eyebrow | DM Sans | 0.7rem | 600 | uppercase, tracking-.25em, preceded by a 32px hairline in terracotta |
-| Body | DM Sans | 1rem | 400 | leading 1.7 |
-| Small / meta | DM Sans | 0.82rem | 500 | text-dim |
-| Pull quote | Cormorant Garamond italic | 1.45rem | 400 | sage-dim colour |
+| Role | Font | Size | Weight | `opsz` | Notes |
+|---|---|---|---|---|---|
+| Hero H1 | Newsreader | `clamp(3.2rem, 6.5vw, 5.5rem)` | 600 | 72 | letter-spacing -.015em, leading 1.05 |
+| Section H2 | Newsreader | `clamp(2.2rem, 4.2vw, 3.2rem)` | 600 | 60 | leading 1.15 |
+| Card H3 | Newsreader | 1.6rem | 600 | 30 | — |
+| Eyebrow | DM Sans | 0.7rem | 600 | — | uppercase, tracking-.25em, preceded by a 32px hairline in terracotta |
+| Body | DM Sans | 1rem | 400 | — | leading 1.7 |
+| Small / meta | DM Sans | 0.82rem | 500 | — | text-dim |
+| Pull quote | Newsreader italic | 1.45rem | 400 | 36 | sage-dim colour |
 
 ### Retired (do NOT use in v2)
-- **Playfair Display** — too sharp, too cool. Used throughout v1. Replace on sight when migrating templates.
+- **Playfair Display** (v1) — too sharp, too cool. Replace on sight.
+- **Cormorant Garamond** (v2 first pick) — superseded. Carried club gravitas but kept too much stroke contrast and too-sharp serifs to match the mark's curvature. Replace on sight when migrating templates that still reference it.
 
 ### Accent spans
 - `.at` → terracotta (`color: var(--terracotta)`) — for emphasised words in H1/H2
