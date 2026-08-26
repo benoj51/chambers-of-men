@@ -96,9 +96,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+# Manifest storage requires a staticfiles.json produced by collectstatic, and
+# raises on any missing entry. Applying it outside production means tests and a
+# fresh checkout fail on admin CSS before collectstatic has ever been run.
 STORAGES = {
     'staticfiles': {
-        'BACKEND': 'whitenoise.storage.CompressedManifestStaticFilesStorage',
+        'BACKEND': (
+            'django.contrib.staticfiles.storage.StaticFilesStorage' if DEBUG
+            else 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+        ),
     },
 }
 
