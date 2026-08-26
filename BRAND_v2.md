@@ -354,12 +354,12 @@ When auditing a template:
 - [ ] No `--teal`, `--teal-*`, `--gold`, `--gold-*` tokens remain
 - [ ] Boxed "CM" nav placeholder replaced with the organic `cm` mark (or awaiting-SVG slot)
 - [ ] Paper-grain noise overlay present (body::after)
-- [ ] Playfair Display for headings, DM Sans for body
+- [ ] Newsreader for headings, DM Sans for body (Playfair Display and Cormorant Garamond are both retired)
 - [ ] Feather icons (1.5px stroke) — not Material Symbols, not Lucide, not emoji
 - [ ] Cream (#EFE9DB) is the only reading colour on dark — no bright white `#fff`
 - [ ] No saturated blues, greens, or purples outside the defined palette
 - [ ] Eyebrows use terracotta hairline + letterspaced DM Sans
-- [ ] Hero H1 uses Playfair 800 with accent span in terracotta (`.at`)
+- [ ] Hero H1 uses Newsreader 600 (`opsz` 72) with accent span in terracotta (`.at`)
 - [ ] No drop shadows under the logo
 - [ ] No "CM" next to the organic mark (redundant)
 
@@ -368,6 +368,6 @@ When auditing a template:
 ## 11. Reference
 
 - **Live styleguide**: `/styleguide/` — rendered components, palette swatches, type specimens
-- **Logo sheet (reference image)**: `static/brand/reference/logo-sheet.png`
+- **Logo sheet (reference image)**: not in the repo - held with the designer alongside the pending SVG
 - **Obsidian mirror**: `brain/church/wiki/chambers-brand-v2.md`
 - **Related wiki**: `brain/church/wiki/chambers-of-men-overview.md`

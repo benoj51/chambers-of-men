@@ -11,6 +11,7 @@ Phase: 4 (stub ready for implementation)
 from crm.agents import is_agent_active, log_task, update_agent_run
 
 AGENT_NAME = 'social_media'
+HASHTAGS = '#ChambersOfMen #MenOfFaith #IronCircle #KeepClimbing'
 
 
 def generate_post_from_blog(blog_post_id):
@@ -41,13 +42,13 @@ def generate_post_from_blog(blog_post_id):
                 f"{post.title}\n\n"
                 f"{excerpt}\n\n"
                 f"Keep climbing, brother.\n\n"
-                f"#TheChamberofMen #MenOfFaith #IronCircle #KeepClimbing"
+                f"{HASHTAGS}"
             )
 
             SocialMediaPost.objects.create(
                 platform=platform,
-                caption=caption,
-                hashtags='#TheChamberofMen #MenOfFaith #IronCircle #KeepClimbing',
+                content=caption,
+                hashtags=HASHTAGS,
                 blog_post=post,
                 status='draft',
             )

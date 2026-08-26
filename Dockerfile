@@ -13,10 +13,13 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
+RUN chmod +x /app/docker-entrypoint.sh
 
-RUN python manage.py collectstatic --noinput 2>/dev/null || true
+# collectstatic runs at build time and must not be allowed to fail silently:
+# ManifestStaticFilesStorage will raise at request time for any missing asset.
+# A build-only SECRET_KEY is used because settings requires one to import.
+RUN SECRET_KEY=build-only-not-used DEBUG=False python manage.py collectstatic --noinput
 
 EXPOSE ${PORT:-8080}
 
-CMD python manage.py migrate --noinput && \
-    gunicorn chambers.wsgi:application --bind 0.0.0.0:${PORT:-8080} --workers 2 --timeout 120
+ENTRYPOINT ["/app/docker-entrypoint.sh"]

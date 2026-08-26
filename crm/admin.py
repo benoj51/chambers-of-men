@@ -400,7 +400,7 @@ class TaskLogAdmin(admin.ModelAdmin):
         }
         colour = colours.get(obj.level, '#6B7280')
         return format_html(
-            '<span style="background: {}; colour: white; padding: 2px 8px; '
+            '<span style="background: {}; color: white; padding: 2px 8px; '
             'border-radius: 4px; font-size: 11px;">{}</span>',
             colour, obj.get_level_display()
         )
@@ -489,7 +489,7 @@ class AdminFlagAdmin(admin.ModelAdmin):
         }
         colour = colours.get(obj.priority, '#6B7280')
         return format_html(
-            '<span style="background: {}; colour: white; padding: 2px 8px; '
+            '<span style="background: {}; color: white; padding: 2px 8px; '
             'border-radius: 4px; font-size: 11px;">{}</span>',
             colour, obj.get_priority_display()
         )
