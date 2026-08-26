@@ -129,7 +129,10 @@ Q_CLUSTER = {
 }
 
 SENDGRID_API_KEY = env('SENDGRID_API_KEY', default='')
-DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='info@thechamberofmen.com')
+# thechamberofmen.com has no DNS records at all, so mail from it fails SPF.
+# chambersofmen.com is the registered domain and matches the current brand
+# name. It still needs sender verification in SendGrid before mail lands.
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='info@chambersofmen.com')
 DEFAULT_FROM_NAME = 'Chambers of Men'
 
 if SENDGRID_API_KEY:
