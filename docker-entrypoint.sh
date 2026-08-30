@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # Container entrypoint for the Chambers of Men platform.
 #
-# Railway builds from the Dockerfile, which means the Procfile is ignored and
-# its "worker: python manage.py qcluster" line never runs. Without a worker no
-# scheduled agent fires, so the onboarding, pipeline and event agents were
-# silently dormant. The worker is started here alongside gunicorn.
+# Railway builds from the Dockerfile, so the Procfile is ignored. The project
+# already runs a dedicated "worker" service whose start command is
+# `python manage.py qcluster`, so this entrypoint does NOT start a worker by
+# default - doing so would run a second cluster inside the web container.
 #
-# Set RUN_WORKER=0 to run web-only (e.g. if the worker is split into its own
-# Railway service later).
+# Set RUN_WORKER=1 only when running web+worker in a single container (local
+# `docker run`, or a single-service deployment with no separate worker).
 set -euo pipefail
 
 PORT="${PORT:-8080}"
@@ -24,7 +24,7 @@ python manage.py seed_agents
 echo "==> Registering scheduled tasks"
 python manage.py setup_schedules
 
-if [ "${RUN_WORKER:-1}" = "1" ]; then
+if [ "${RUN_WORKER:-0}" = "1" ]; then
     echo "==> Starting django-q worker"
     python manage.py qcluster &
     WORKER_PID=$!
