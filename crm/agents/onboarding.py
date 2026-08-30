@@ -57,7 +57,7 @@ def process_new_signup(submission_id):
             'reason_for_joining': submission.message,
             'how_heard': _map_how_heard(submission.how_heard),
             'status': 'prospect',
-            'onboarding_status': 'not_started',
+            'onboarding_step': 'new',
         }
     )
 
@@ -82,8 +82,8 @@ def process_new_signup(submission_id):
     sent = send_template_email('welcome', submission.email, context)
 
     if sent:
-        member.onboarding_status = 'welcome_sent'
-        member.save(update_fields=['onboarding_status', 'updated_at'])
+        member.onboarding_step = 'welcome_sent'
+        member.save(update_fields=['onboarding_step', 'updated_at'])
         log_task(
             AGENT_NAME, 'Welcome email sent',
             f'To: {submission.name} ({submission.email})',
@@ -120,7 +120,7 @@ def process_follow_ups():
     # Day 2 follow-ups: members with welcome_sent, created 2+ days ago
     day_2_cutoff = now - timedelta(days=2)
     day_2_members = Member.objects.filter(
-        onboarding_status='welcome_sent',
+        onboarding_step='welcome_sent',
         created_at__lte=day_2_cutoff,
     )
 
@@ -128,8 +128,8 @@ def process_follow_ups():
         context = _build_member_context(member)
         sent = send_template_email('follow_up_day_2', member.email, context)
         if sent:
-            member.onboarding_status = 'follow_up_1'
-            member.save(update_fields=['onboarding_status', 'updated_at'])
+            member.onboarding_step = 'follow_up_1'
+            member.save(update_fields=['onboarding_step', 'updated_at'])
             log_task(
                 AGENT_NAME, 'Day 2 follow-up sent',
                 f'To: {member.full_name} ({member.email})',
@@ -141,7 +141,7 @@ def process_follow_ups():
     # Day 5 follow-ups: members with follow_up_1, created 5+ days ago
     day_5_cutoff = now - timedelta(days=5)
     day_5_members = Member.objects.filter(
-        onboarding_status='follow_up_1',
+        onboarding_step='follow_up_1',
         created_at__lte=day_5_cutoff,
     )
 
@@ -149,8 +149,8 @@ def process_follow_ups():
         context = _build_member_context(member)
         sent = send_template_email('follow_up_day_5', member.email, context)
         if sent:
-            member.onboarding_status = 'follow_up_2'
-            member.save(update_fields=['onboarding_status', 'updated_at'])
+            member.onboarding_step = 'follow_up_2'
+            member.save(update_fields=['onboarding_step', 'updated_at'])
             log_task(
                 AGENT_NAME, 'Day 5 follow-up sent',
                 f'To: {member.full_name} ({member.email})',
@@ -162,7 +162,7 @@ def process_follow_ups():
     # Day 10 final follow-ups: members with follow_up_2, created 10+ days ago
     day_10_cutoff = now - timedelta(days=10)
     day_10_members = Member.objects.filter(
-        onboarding_status='follow_up_2',
+        onboarding_step='follow_up_2',
         created_at__lte=day_10_cutoff,
     )
 
@@ -170,8 +170,8 @@ def process_follow_ups():
         context = _build_member_context(member)
         sent = send_template_email('follow_up_day_10', member.email, context)
         if sent:
-            member.onboarding_status = 'follow_up_3'
-            member.save(update_fields=['onboarding_status', 'updated_at'])
+            member.onboarding_step = 'follow_up_3'
+            member.save(update_fields=['onboarding_step', 'updated_at'])
             log_task(
                 AGENT_NAME, 'Day 10 final follow-up sent',
                 f'To: {member.full_name} ({member.email})',
@@ -183,55 +183,49 @@ def process_follow_ups():
     # Flag stalled onboarding: follow_up_3 sent 7+ days ago with no progression
     stalled_cutoff = now - timedelta(days=17)  # 10 days + 7 days grace
     stalled_members = Member.objects.filter(
-        onboarding_status='follow_up_3',
+        onboarding_step='follow_up_3',
         created_at__lte=stalled_cutoff,
     )
 
     for member in stalled_members:
-        # Check if flag already exists
-        from crm.models import AdminFlag
-        existing = AdminFlag.objects.filter(
+        # create_admin_flag is idempotent - it will not raise a duplicate for
+        # the same member while an earlier flag is still unresolved.
+        flag = create_admin_flag(
             flag_type='onboarding_stalled',
+            title=f'Onboarding stalled for {member.full_name}',
+            description=(
+                f'{member.full_name} ({member.email}) completed the full '
+                f'email sequence but has not progressed to an interview. '
+                f'Consider a personal phone call or removal from the pipeline.'
+            ),
+            priority='medium',
+            agent_name=AGENT_NAME,
             member=member,
-            is_resolved=False,
-        ).exists()
-
-        if not existing:
-            create_admin_flag(
-                flag_type='onboarding_stalled',
-                title=f'Onboarding stalled for {member.full_name}',
-                description=(
-                    f'{member.full_name} ({member.email}) completed the full '
-                    f'email sequence but has not progressed to an interview. '
-                    f'Consider a personal phone call or removal from the pipeline.'
-                ),
-                priority='medium',
-                agent_name=AGENT_NAME,
-                member=member,
-            )
+        )
+        if flag is not None:
             log_task(
                 AGENT_NAME, 'Onboarding stalled flag created',
                 f'For: {member.full_name}', level='warning', member=member
             )
 
-    # Interview reminders: 24hr before scheduled interview
-    tomorrow_start = now + timedelta(hours=20)
-    tomorrow_end = now + timedelta(hours=28)
+    # Interview reminders: the day before a scheduled interview.
+    # interview_date is a DateField, so this is a date comparison, not a
+    # datetime window.
     interview_members = Member.objects.filter(
-        onboarding_status='interview_scheduled',
-        interview_scheduled_date__range=(tomorrow_start, tomorrow_end),
+        onboarding_step='interview_scheduled',
+        interview_date=now.date() + timedelta(days=1),
     )
 
     for member in interview_members:
         context = _build_member_context(member)
-        if member.interview_scheduled_date:
-            context['interview_date'] = member.interview_scheduled_date.strftime('%A %d %B at %I:%M %p')
+        if member.interview_date:
+            context['interview_date'] = member.interview_date.strftime('%A %d %B')
 
         sent = send_template_email('interview_reminder', member.email, context)
         if sent:
             log_task(
                 AGENT_NAME, 'Interview reminder sent',
-                f'To: {member.full_name} - interview on {member.interview_scheduled_date}',
+                f'To: {member.full_name} - interview on {member.interview_date}',
                 level='success', member=member,
                 email_sent_to=member.email, template_used='interview_reminder'
             )

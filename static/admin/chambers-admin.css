@@ -1,0 +1,270 @@
+/* ==========================================================================
+   Chambers of Men — admin theme
+
+   Rebrands the Django admin by redefining the admin's own CSS custom
+   properties rather than overriding rules, so it keeps working when Django's
+   stylesheets change. Tokens come from BRAND_v2.md §3.
+
+   The admin stays on a light ground: it is a dense back-office data tool, and
+   BRAND_v2 §3 reserves the dark members-club treatment for the public digital
+   surfaces. Django's own dark mode is respected below, retinted to the brand.
+   The retired v1 teal (#417690 / #79aec8, Django's defaults) is fully replaced.
+   ========================================================================== */
+
+:root {
+  /* Brand palette (BRAND_v2.md §3) */
+  --cm-slate:            #0B0F14;
+  --cm-slate-soft:       #1F2731;
+  --cm-terracotta:       #B86B47;  /* terracotta-dim: contrast on light ground */
+  --cm-terracotta-deep:  #9E5735;
+  --cm-terracotta-light: #D17F56;
+  --cm-sage:             #4B6650;
+  --cm-sage-soft:        #7A9879;
+  --cm-steel:            #47637C;
+  --cm-cream:            #EFE9DB;
+  --cm-paper:            #F7F4EC;
+
+  /* --- Django admin tokens --- */
+  --primary: var(--cm-slate-soft);
+  --secondary: var(--cm-slate);
+  --accent: var(--cm-terracotta-light);
+  --primary-fg: var(--cm-cream);
+
+  --body-fg: #24282D;
+  --body-bg: #FFFFFF;
+  --body-quiet-color: #6E675C;
+  --body-medium-color: #45413A;
+  --body-loud-color: var(--cm-slate);
+
+  /* Django's default header text is #ffc (pale yellow) — off-brand */
+  --header-color: var(--cm-cream);
+  --header-branding-color: var(--cm-terracotta-light);
+  --header-bg: var(--cm-slate);
+  --header-link-color: var(--cm-cream);
+
+  --breadcrumbs-fg: #C9C2B4;
+  --breadcrumbs-link-fg: var(--cm-cream);
+  --breadcrumbs-bg: var(--cm-slate-soft);
+
+  --link-fg: var(--cm-terracotta-deep);
+  --link-hover-color: var(--cm-slate);
+  --link-selected-fg: var(--cm-terracotta-deep);
+
+  --hairline-color: #E7E1D4;
+  --border-color: #D6CFC0;
+
+  --error-fg: #A3341F;
+  --message-success-bg: #E8EFE6;
+  --message-warning-bg: #F6EBDF;
+  --message-error-bg: #F7E7E3;
+
+  --darkened-bg: var(--cm-paper);
+  --selected-bg: #EFE9DB;
+  --selected-row: #F6EBDF;
+
+  --button-fg: var(--cm-cream);
+  --button-bg: var(--cm-slate-soft);
+  --button-hover-bg: var(--cm-slate);
+  --default-button-bg: var(--cm-terracotta);
+  --default-button-hover-bg: var(--cm-terracotta-deep);
+  --close-button-bg: #7A736A;
+  --close-button-hover-bg: #45413A;
+  --delete-button-bg: #A3341F;
+  --delete-button-hover-bg: #86271F;
+
+  --object-tools-fg: var(--cm-cream);
+  --object-tools-bg: var(--cm-slate-soft);
+  --object-tools-hover-bg: var(--cm-terracotta);
+}
+
+/* Django ships a dark mode keyed on prefers-color-scheme, plus an explicit
+   [data-theme] toggle. Retint both so the brand survives either path, and
+   guard the media query so an explicit light choice still wins. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --body-bg: #14181D;
+    --body-fg: var(--cm-cream);
+    --body-quiet-color: #A8B0B8;
+    --body-loud-color: #FFFFFF;
+    --header-bg: #080B0F;
+    --breadcrumbs-bg: #11161C;
+    --link-fg: var(--cm-terracotta-light);
+    --link-hover-color: #E39972;
+    --link-selected-fg: var(--cm-terracotta-light);
+    --hairline-color: #262C34;
+    --border-color: #333A43;
+    --darkened-bg: #191E24;
+    --selected-bg: #222831;
+    --selected-row: #2C2419;
+    --default-button-bg: var(--cm-terracotta);
+    --default-button-hover-bg: var(--cm-terracotta-light);
+  }
+}
+html[data-theme="dark"] {
+  --body-bg: #14181D;
+  --body-fg: var(--cm-cream);
+  --body-quiet-color: #A8B0B8;
+  --body-loud-color: #FFFFFF;
+  --header-bg: #080B0F;
+  --breadcrumbs-bg: #11161C;
+  --link-fg: var(--cm-terracotta-light);
+  --link-hover-color: #E39972;
+  --link-selected-fg: var(--cm-terracotta-light);
+  --hairline-color: #262C34;
+  --border-color: #333A43;
+  --darkened-bg: #191E24;
+  --selected-bg: #222831;
+  --selected-row: #2C2419;
+  --default-button-bg: var(--cm-terracotta);
+  --default-button-hover-bg: var(--cm-terracotta-light);
+}
+
+/* --- Masthead ---------------------------------------------------------- */
+#site-name a:link,
+#site-name a:visited { color: var(--cm-cream); }
+#branding h1 { font-weight: 600; letter-spacing: .01em; }
+
+/* Module captions read as section headers rather than blue bars. */
+.module caption,
+.inline-group h2 {
+  background: var(--cm-slate-soft);
+  color: var(--cm-cream);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-size: .7rem;
+}
+
+/* --- Dashboard --------------------------------------------------------- */
+.cm-dash { margin: 0 0 1.75rem; }
+
+.cm-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: .75rem;
+  margin-bottom: 1.5rem;
+}
+.cm-card {
+  background: var(--body-bg);
+  border: 1px solid var(--border-color);
+  border-left: 3px solid var(--cm-steel);
+  border-radius: 6px;
+  padding: .85rem 1rem;
+  display: block;
+  text-decoration: none;
+}
+.cm-card:hover { border-left-color: var(--cm-terracotta); }
+.cm-card .cm-num {
+  display: block;
+  font-size: 1.9rem;
+  line-height: 1.1;
+  font-weight: 600;
+  color: var(--body-loud-color);
+  font-variant-numeric: tabular-nums;
+}
+.cm-card .cm-label {
+  display: block;
+  font-size: .72rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--body-quiet-color);
+  margin-top: .2rem;
+}
+/* Severity is encoded in the rail as well as the number, so what needs
+   attention reads at a glance rather than only on inspection. */
+.cm-card.cm-attention { border-left-color: var(--cm-terracotta); }
+.cm-card.cm-attention .cm-num { color: var(--cm-terracotta-deep); }
+.cm-card.cm-good { border-left-color: var(--cm-sage-soft); }
+.cm-card.cm-idle .cm-num { color: var(--body-quiet-color); }
+
+/* Dashboard panels use their own class: reusing Django's .module would
+   inherit its dark h2 bar and fight the section heading style above. */
+.cm-panel {
+  background: var(--body-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 1rem 1.1rem 1.1rem;
+  margin-bottom: 1.25rem;
+}
+.cm-panel > h2 {
+  font-size: .7rem;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--cm-terracotta-deep);
+  background: none;
+  padding: 0;
+  margin: 0 0 .85rem;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+}
+.cm-panel > h2::before {
+  content: "";
+  width: 28px; height: 1px;
+  background: var(--cm-terracotta);
+  flex: none;
+}
+html[data-theme="dark"] .cm-panel > h2 { color: var(--cm-terracotta-light); }
+
+.cm-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
+.cm-table th {
+  text-align: left;
+  font-size: .64rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--body-quiet-color);
+  padding: .4rem .6rem;
+  border-bottom: 1px solid var(--border-color);
+  font-weight: 600;
+  /* Django's admin sets a narrow width on table headers; without this the
+     short numeric columns wrap one letter per line. */
+  white-space: nowrap;
+  width: auto;
+}
+.cm-table td {
+  padding: .5rem .6rem;
+  border-bottom: 1px solid var(--hairline-color);
+  vertical-align: middle;
+}
+.cm-table tr:last-child td { border-bottom: 0; }
+/* Dates and counts should never wrap mid-value. */
+.cm-table td.cm-nowrap { white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.cm-pill {
+  display: inline-block;
+  font-size: .62rem;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  padding: .14rem .5rem;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.cm-pill-urgent { background: #F3DDD7; color: #8C2D18; }
+.cm-pill-high   { background: #F6E3D6; color: #8F4A2A; }
+.cm-pill-medium { background: #F1EADB; color: #6E5A3A; }
+.cm-pill-low    { background: #E8EFE6; color: #3F5840; }
+.cm-pill-on     { background: #E8EFE6; color: #3F5840; }
+.cm-pill-off    { background: #EDE9E1; color: #6E675C; }
+
+/* Pills deliberately keep their light fills in dark mode: they are severity
+   encoding, and flattening them to one grey would throw that away. Dark text
+   on a light pill stays legible against the dark card. */
+
+.cm-empty {
+  color: var(--body-quiet-color);
+  font-style: italic;
+  padding: .6rem 0;
+  margin: 0;
+}
+.cm-note {
+  border-left: 2px solid var(--cm-terracotta);
+  background: var(--darkened-bg);
+  padding: .7rem .9rem;
+  margin: 0 0 1.25rem;
+  font-size: .84rem;
+}
+.cm-note strong { color: var(--body-loud-color); }
+
+@media (max-width: 767px) {
+  .cm-cards { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+}
