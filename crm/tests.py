@@ -420,3 +420,142 @@ class AgentTaskTests(TestCase):
         for task in tasks:
             with self.subTest(task=task.__name__):
                 task()
+
+
+@override_settings(
+    EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend',
+    Q_CLUSTER=SYNC_Q,
+)
+class AdminDashboardTests(TestCase):
+    """The dashboard replaces a bare model list, so it must survive an empty
+    database as well as a populated one."""
+
+    @classmethod
+    def setUpTestData(cls):
+        get_user_model().objects.create_superuser('boss', 'b@e.com', 'pw-for-tests-123')
+
+    def setUp(self):
+        self.client.force_login(get_user_model().objects.get(username='boss'))
+
+    def test_dashboard_renders_on_an_empty_database(self):
+        response = self.client.get(reverse('admin:index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Signups waiting')
+        # With no AgentConfig rows at all, the dashboard must say so rather
+        # than quietly showing an empty table.
+        self.assertContains(response, 'has not been seeded')
+
+    def test_dashboard_counts_reflect_the_data(self):
+        call_command('seed_agents', verbosity=0, stdout=StringIO())
+        AgentConfig.objects.filter(agent_name='onboarding').update(is_active=False)
+        ContactSubmission.objects.create(name='Waiting', email='w@e.com', is_processed=False)
+        ContactSubmission.objects.create(name='Done', email='d@e.com', is_processed=True)
+        Member.objects.create(first_name='A', last_name='B', email='a@e.com', status='active')
+        AdminFlag.objects.create(
+            agent_name='crm_pipeline', flag_type='inactive_member',
+            title='Someone went quiet', priority='urgent')
+
+        response = self.client.get(reverse('admin:index'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Someone went quiet')
+        self.assertContains(response, 'Onboarding')
+        self.assertNotContains(response, 'has not been seeded')
+        # One unprocessed submission, one open flag.
+        cards = {c['label']: c['num'] for c in response.context['cards']} \
+            if 'cards' in response.context else None
+        if cards:
+            self.assertEqual(cards['Signups waiting'], 1)
+            self.assertEqual(cards['Open flags'], 1)
+
+    def test_flags_are_ordered_by_severity_not_alphabetically(self):
+        from crm.templatetags.chambers_admin import priority_rank
+
+        flags = [
+            AdminFlag.objects.create(agent_name='a', title='low one', priority='low'),
+            AdminFlag.objects.create(agent_name='a', title='urgent one', priority='urgent'),
+            AdminFlag.objects.create(agent_name='a', title='medium one', priority='medium'),
+            AdminFlag.objects.create(agent_name='a', title='high one', priority='high'),
+        ]
+        ordered = [f.priority for f in priority_rank(flags)]
+        self.assertEqual(ordered, ['urgent', 'high', 'medium', 'low'])
+
+    def test_admin_theme_stylesheet_is_served_on_every_page(self):
+        for url in (reverse('admin:index'), reverse('admin:crm_member_changelist')):
+            with self.subTest(url=url):
+                response = self.client.get(url)
+                self.assertContains(response, 'chambers-admin.css')
+
+    def test_browser_title_uses_the_current_brand_name(self):
+        """The rename to "Chambers of Men" missed site_title, which still read
+        'TCM Admin' - the retired name."""
+        response = self.client.get(reverse('admin:index'))
+        self.assertNotContains(response, 'TCM')
+
+
+@override_settings(
+    EMAIL_BACKEND='django.core.mail.backends.locmem.EmailBackend',
+    Q_CLUSTER=SYNC_Q,
+)
+class AdminActionTests(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        get_user_model().objects.create_superuser('boss', 'b@e.com', 'pw-for-tests-123')
+
+    def setUp(self):
+        self.client.force_login(get_user_model().objects.get(username='boss'))
+        call_command('seed_agents', verbosity=0, stdout=StringIO())
+        AgentConfig.objects.update(is_active=True)
+
+    def _run(self, action, queryset_model, pks):
+        return self.client.post(
+            reverse(f'admin:crm_{queryset_model}_changelist'),
+            {'action': action, '_selected_action': [str(p) for p in pks]},
+            follow=True,
+        )
+
+    def test_run_onboarding_creates_member_and_sends_welcome(self):
+        sub = ContactSubmission.objects.create(
+            name='John Smith', email='john@example.com', city='London', how_heard='church')
+        self._run('run_onboarding', 'contactsubmission', [sub.pk])
+
+        self.assertTrue(Member.objects.filter(email='john@example.com').exists())
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertTrue(ContactSubmission.objects.get(pk=sub.pk).is_processed)
+
+    def test_run_onboarding_says_so_when_the_agent_is_paused(self):
+        AgentConfig.objects.filter(agent_name='onboarding').update(is_active=False)
+        sub = ContactSubmission.objects.create(name='Nope', email='nope@e.com')
+        response = self._run('run_onboarding', 'contactsubmission', [sub.pk])
+
+        self.assertContains(response, 'paused')
+        self.assertFalse(Member.objects.filter(email='nope@e.com').exists())
+        self.assertEqual(len(mail.outbox), 0)
+
+    def test_create_member_action_maps_how_heard(self):
+        sub = ContactSubmission.objects.create(
+            name='Free Text', email='ft@e.com', how_heard='Social Media')
+        self._run('create_member_from_submission', 'contactsubmission', [sub.pk])
+
+        member = Member.objects.get(email='ft@e.com')
+        # Free text on the form, a choice on the model - the value used to be
+        # dropped entirely.
+        self.assertEqual(member.how_heard, 'social_media')
+
+    def test_approve_progressions_actually_approves(self):
+        """The action filtered on status='pending', which is not a valid choice,
+        so it approved nothing while reporting success."""
+        member = Member.objects.create(
+            first_name='Rising', last_name='Star', email='r@e.com', role='member')
+        prog = LeadershipProgression.objects.create(
+            member=member, from_role='member', to_role='foundation_support',
+            status='nominated')
+
+        self._run('approve_progressions', 'leadershipprogression', [prog.pk])
+
+        prog.refresh_from_db()
+        member.refresh_from_db()
+        self.assertEqual(prog.status, 'approved')
+        self.assertEqual(prog.reviewed_by, 'boss')
+        self.assertIsNotNone(prog.reviewed_at)
+        self.assertEqual(member.role, 'foundation_support')

@@ -1,0 +1,94 @@
+{% load chambers_admin %}
+<div class="cm-dash">
+
+  {% if agents_unconfigured %}
+    <p class="cm-note">
+      <strong>The agent framework has not been seeded.</strong>
+      No agent will run and no automated email will be sent until it is.
+      Run <code>python manage.py seed_agents</code> on the server.
+    </p>
+  {% endif %}
+
+  <div class="cm-cards">
+    {% for card in cards %}
+      <a class="cm-card{% if card.state %} cm-{{ card.state }}{% endif %}" href="{{ card.url }}">
+        <span class="cm-num">{{ card.num }}</span>
+        <span class="cm-label">{{ card.label }}</span>
+      </a>
+    {% endfor %}
+  </div>
+
+  <div class="cm-panel">
+    <h2>Needs attention</h2>
+    {% if flags %}
+      <table class="cm-table">
+        <thead>
+          <tr><th>Priority</th><th>Flag</th><th>Member</th><th>Raised</th></tr>
+        </thead>
+        <tbody>
+          {% for flag in flags|priority_rank %}
+            <tr>
+              <td><span class="cm-pill cm-pill-{{ flag.priority }}">{{ flag.get_priority_display }}</span></td>
+              <td><a href="{% url 'admin:crm_adminflag_change' flag.pk %}">{{ flag.title }}</a></td>
+              <td>{% if flag.member %}{{ flag.member }}{% else %}&mdash;{% endif %}</td>
+              <td class="cm-nowrap">{{ flag.created_at|date:"j M Y" }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p style="margin:.6rem 0 0"><a href="{{ flag_changelist }}">All open flags &rarr;</a></p>
+    {% else %}
+      <p class="cm-empty">Nothing flagged. The agents raise items here as they find them.</p>
+    {% endif %}
+  </div>
+
+  <div class="cm-panel">
+    <h2>Agents</h2>
+    <table class="cm-table">
+      <thead>
+        <tr><th>Agent</th><th>Status</th><th>Last run</th><th>Runs</th></tr>
+      </thead>
+      <tbody>
+        {% for agent in agents %}
+          <tr>
+            <td>{{ agent.name }}</td>
+            <td>
+              {% if not agent.configured %}
+                <span class="cm-pill cm-pill-off">Not configured</span>
+              {% elif agent.is_active %}
+                <span class="cm-pill cm-pill-on">Active</span>
+              {% else %}
+                <span class="cm-pill cm-pill-off">Paused</span>
+              {% endif %}
+            </td>
+            <td class="cm-nowrap">{% if agent.last_run %}{{ agent.last_run|date:"j M Y, H:i" }}{% else %}<span class="cm-empty" style="padding:0">Never</span>{% endif %}</td>
+            <td class="cm-nowrap">{{ agent.run_count }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p style="margin:.6rem 0 0"><a href="{{ agent_changelist }}">Agent configuration &rarr;</a></p>
+  </div>
+
+  <div class="cm-panel">
+    <h2>Coming up</h2>
+    {% if upcoming_events %}
+      <table class="cm-table">
+        <thead><tr><th>Date</th><th>Event</th><th>Chamber</th></tr></thead>
+        <tbody>
+          {% for event in upcoming_events %}
+            <tr>
+              <td class="cm-nowrap">{{ event.date|date:"j M Y" }}</td>
+              <td><a href="{% url 'admin:crm_event_change' event.pk %}">{{ event.name }}</a></td>
+              <td>{% if event.chamber %}{{ event.chamber.name }}{% else %}&mdash;{% endif %}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <p style="margin:.6rem 0 0"><a href="{{ event_changelist }}">All events &rarr;</a></p>
+    {% else %}
+      <p class="cm-empty">No published events scheduled. Unpublished events stay hidden from the website.</p>
+    {% endif %}
+  </div>
+
+</div>

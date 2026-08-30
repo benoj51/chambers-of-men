@@ -74,7 +74,7 @@ class Member(models.Model):
         help_text="How many years the member has been active in their church"
     )
     notes = models.TextField(blank=True)
-    reason_for_joining = models.TextField(blank=True, help_text="Why they want to be part of TCM")
+    reason_for_joining = models.TextField(blank=True, help_text="Why they want to be part of Chambers of Men")
 
     # Agent framework fields
     onboarding_step = models.CharField(max_length=50, default='new', blank=True)
