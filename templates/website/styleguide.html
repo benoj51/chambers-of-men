@@ -57,7 +57,7 @@
         .logo-card{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--glass-border);border-radius:12px;padding:3.5rem 2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:320px;gap:1.5rem;text-align:center}
         .logo-placeholder{width:140px;height:140px;border:1.5px dashed var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;text-align:center;padding:1rem;font-family:'DM Sans',sans-serif}
         .logo-label{font:600 .72rem/1 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim)}
-        .logo-name{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--cream)}
+        .logo-name{font-family:'Newsreader',Georgia,serif;font-size:1.2rem;color:var(--cream)}
         .logo-awaiting{margin-top:1.5rem;padding:1rem 1.2rem;background:var(--terracotta-glow);border-left:2px solid var(--terracotta);color:var(--cream);font-size:.85rem;line-height:1.6;border-radius:0 6px 6px 0}
 
         /* Palette */
@@ -92,7 +92,7 @@
         .comp-card:hover{border-color:var(--border-hover);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.3)}
         .comp-card:hover::before{opacity:1}
         .comp-card-label{font:600 .68rem/1 'DM Sans',sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--text-dim);margin-bottom:1.2rem}
-        .comp-card h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:.6rem}
+        .comp-card h3{font-size:1.3rem;margin-bottom:.6rem}
         .comp-card p{font-size:.9rem;color:var(--text-secondary)}
 
         .btn-primary{display:inline-flex;align-items:center;gap:.6rem;padding:.9rem 2.2rem;background:var(--terracotta);color:var(--bg-deep);font:600 .78rem/1 'DM Sans',sans-serif;letter-spacing:.12em;text-transform:uppercase;text-decoration:none;border:none;border-radius:6px;cursor:pointer;transition:all .35s}
@@ -111,7 +111,7 @@
 
         /* Texture card */
         .texture-card{background:var(--glass);backdrop-filter:blur(16px);border:1px solid var(--glass-border);border-radius:12px;padding:2rem;position:relative;overflow:hidden}
-        .texture-swatch{margin-top:1rem;height:120px;border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--cream);font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem}
+        .texture-swatch{margin-top:1rem;height:120px;border-radius:8px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;color:var(--cream);font-style:italic;font-size:1.1rem}
         .texture-swatch-bg{background:var(--bg-surface)}
         .texture-swatch-cream{background:var(--cream-warm);color:var(--bg-deep)}
         .texture-swatch::after{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.06'/%3E%3C/svg%3E");pointer-events:none}
@@ -128,9 +128,9 @@
         .retired-pill{display:inline-flex;align-items:center;gap:.5rem;padding:.4rem .9rem;background:var(--bg-surface);border:1px solid var(--border);border-radius:20px;font-family:ui-monospace,Menlo,monospace;font-size:.78rem;color:var(--text-dim);text-decoration:line-through}
         .retired-pill .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
 
-        nav.back-nav{position:fixed;top:1.5rem;left:1.5rem;z-index:100;display:flex;gap:.6rem;align-items:center;padding:.55rem 1rem;background:rgba(11,15,20,.7);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);text-decoration:none;font:500 .72rem/1 'DM Sans';letter-spacing:.15em;text-transform:uppercase;transition:all .3s}
-        nav.back-nav:hover{border-color:var(--border-hover);color:var(--terracotta)}
-        nav.back-nav svg{width:14px;height:14px;stroke-width:2}
+        .back-nav{position:fixed;top:1.5rem;left:1.5rem;z-index:100;display:flex;gap:.6rem;align-items:center;padding:.55rem 1rem;background:rgba(11,15,20,.7);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:6px;color:var(--text-primary);text-decoration:none;font:500 .72rem/1 'DM Sans';letter-spacing:.15em;text-transform:uppercase;transition:all .3s}
+        .back-nav:hover{border-color:var(--border-hover);color:var(--terracotta)}
+        .back-nav svg{width:14px;height:14px;stroke-width:2}
 
         @media(max-width:900px){
             .logo-grid,.palette-grid,.comp-grid,.anti-list{grid-template-columns:1fr}
@@ -239,18 +239,18 @@
         <div class="section-head">
             <div class="eyebrow">03 &mdash; Typography</div>
             <h2>The <span class="at">Type System</span></h2>
-            <p>Playfair Display carries the weight. DM Sans carries the rest. The pairing is members-club by design.</p>
+            <p>Newsreader carries the weight. DM Sans carries the rest. The pairing is members-club by design.</p>
         </div>
         <div class="type-row">
-            <div class="type-meta"><strong>Hero H1</strong><span>Playfair Display &middot; 800 &middot; clamp(3rem, 6.5vw, 5.2rem)</span></div>
+            <div class="type-meta"><strong>Hero H1</strong><span>Newsreader &middot; 600 &middot; <code>opsz</code> 72 &middot; clamp(3.2rem, 6.5vw, 5.5rem)</span></div>
             <div class="type-specimen-h1">Awaken. Equip. <span class="at">Deploy.</span></div>
         </div>
         <div class="type-row">
-            <div class="type-meta"><strong>Section H2</strong><span>Playfair Display &middot; 700 &middot; clamp(2rem, 4vw, 3rem)</span></div>
+            <div class="type-meta"><strong>Section H2</strong><span>Newsreader &middot; 600 &middot; <code>opsz</code> 60 &middot; clamp(2.2rem, 4.2vw, 3.2rem)</span></div>
             <div class="type-specimen-h2">The Five <span class="at">Pillars</span></div>
         </div>
         <div class="type-row">
-            <div class="type-meta"><strong>Card H3</strong><span>Playfair Display &middot; 700 &middot; 1.4rem</span></div>
+            <div class="type-meta"><strong>Card H3</strong><span>Newsreader &middot; 600 &middot; <code>opsz</code> 30 &middot; 1.6rem</span></div>
             <div class="type-specimen-h3">Brotherhood &amp; Accountability</div>
         </div>
         <div class="type-row">
@@ -262,7 +262,7 @@
             <div class="type-specimen-body">Every man enters a process: roused from passivity, forged by truth, and commissioned to impact. Chambers of Men is not a programme. It is a brotherhood under a structured hierarchy of accountability.</div>
         </div>
         <div class="type-row">
-            <div class="type-meta"><strong>Pull quote</strong><span>Playfair Display italic &middot; 400 &middot; 1.3rem &middot; sage-dim</span></div>
+            <div class="type-meta"><strong>Pull quote</strong><span>Newsreader italic &middot; 400 &middot; <code>opsz</code> 36 &middot; 1.45rem &middot; sage-dim</span></div>
             <div class="type-specimen-quote">&ldquo;A worldwide network of Kings and Priests, unified in mission, accountable to the brotherhood.&rdquo;</div>
         </div>
     </div>

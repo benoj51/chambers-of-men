@@ -8,6 +8,8 @@ Schedule: Monthly on 1st + triggered when member becomes active
 Phase: 3 (stub ready for implementation)
 """
 
+from django.db.models import Count
+
 from crm.agents import (
     is_agent_active, log_task, update_agent_run,
     send_template_email, create_admin_flag,
@@ -28,12 +30,19 @@ def match_member_to_circle(member_id):
     except Member.DoesNotExist:
         return
 
-    circles = IronCircle.objects.filter(
-        is_open=True, chamber__city=member.city
-    ).order_by('members')
+    # order_by('members') orders by the join row, not by size, and duplicates
+    # each circle once per member. Count explicitly instead.
+    def _open_circles(**extra):
+        return (
+            IronCircle.objects
+            .filter(is_open=True, **extra)
+            .annotate(current_size=Count('members'))
+            .order_by('current_size')
+        )
 
+    circles = _open_circles(chamber__city=member.city)
     if not circles.exists():
-        circles = IronCircle.objects.filter(is_open=True).order_by('members')
+        circles = _open_circles()
 
     for circle in circles:
         if not circle.is_full:
@@ -41,6 +50,7 @@ def match_member_to_circle(member_id):
             CircleAssignmentHistory.objects.create(
                 member=member, circle=circle,
                 action='joined', performed_by='Iron Circle Agent',
+                reason=f'Matched by city: {member.city or "unspecified"}',
             )
             context = {
                 'name': member.full_name, 'first_name': member.first_name,

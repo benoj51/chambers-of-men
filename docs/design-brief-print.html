@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chambers of Men Website Brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..400&display=swap" rel="stylesheet">
+
+<style>
+  /* ------------------------------------------------------------------
+     Chambers of Men v2 tokens — verbatim from BRAND_v2.md §3.
+     This brand deliberately commits to a single dark "members-club"
+     world (§3: "the members-club mood lives in the dark"), so this page
+     is single-theme by design and paints every colour explicitly.
+     ------------------------------------------------------------------ */
+  :root {
+    --bg-deep: #0B0F14;
+    --bg-base: #11161C;
+    --bg-surface: #181F28;
+    --bg-elevated: #1F2731;
+
+    --terracotta: #D17F56;
+    --terracotta-light: #E39972;
+    --terracotta-dim: #B86B47;
+    --terracotta-glow: rgba(209,127,86,.15);
+
+    --sage: #7A9879;
+    --sage-light: #94AB93;
+    --sage-dim: #5F7A5E;
+    --sage-glow: rgba(122,152,121,.14);
+
+    --steel: #7A95AE;
+    --steel-light: #A8C5DE;
+    --steel-glow: rgba(122,149,174,.10);
+
+    --cream: #EFE9DB;
+    --text-primary: #EFE9DB;
+    --text-secondary: #A8B0B8;
+    --text-dim: #6B737C;
+
+    --border: rgba(239,233,219,.08);
+    --border-hover: rgba(209,127,86,.22);
+
+    --measure: 68ch;
+    --gutter: clamp(1.25rem, 5vw, 4rem);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg-deep);
+    color: var(--text-secondary);
+    font-family: 'DM Sans', -apple-system, 'Segoe UI', Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Paper grain — BRAND_v2.md §5, held at .018 */
+  body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.018'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Newsreader', Georgia, serif;
+    color: var(--cream);
+    font-weight: 600;
+    line-height: 1.15;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .at { color: var(--terracotta); }
+  .sg { color: var(--sage); }
+
+  a { color: var(--terracotta); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+  a:hover { color: var(--terracotta-light); }
+  a:focus-visible,
+  summary:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 3px; border-radius: 3px; }
+
+  code {
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: .86em;
+    color: var(--steel-light);
+    background: rgba(122,149,174,.10);
+    padding: .12em .4em;
+    border-radius: 3px;
+  }
+
+  /* ---------- layout ---------- */
+  .wrap { max-width: 1120px; margin: 0 auto; padding-inline: var(--gutter); }
+  .prose { max-width: var(--measure); }
+  .prose p { margin: 0 0 1.1rem; }
+  .prose p:last-child { margin-bottom: 0; }
+
+  section { padding-block: clamp(3rem, 7vw, 5.5rem); }
+
+  .sep {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .stack { display: flex; flex-direction: column; gap: 1.6rem; }
+  .stack-sm { display: flex; flex-direction: column; gap: .75rem; }
+
+  /* ---------- eyebrow — BRAND_v2.md §7 ---------- */
+  .eyebrow {
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.1rem;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--terracotta);
+    flex: none;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead { padding-block: clamp(3.5rem, 9vw, 7rem) clamp(2.5rem, 6vw, 4rem); }
+  .masthead h1 {
+    font-size: clamp(2.6rem, 6vw, 4.6rem);
+    font-variation-settings: 'opsz' 72;
+    letter-spacing: -.015em;
+    line-height: 1.05;
+  }
+  .masthead .standfirst {
+    font-size: clamp(1.05rem, 1.6vw, 1.2rem);
+    color: var(--text-secondary);
+    max-width: 60ch;
+    margin-top: 1.6rem;
+  }
+
+  .meta-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem 2.2rem;
+    margin-top: 2.4rem;
+    padding-top: 1.4rem;
+    border-top: 1px solid var(--border);
+    font-size: .8rem;
+    color: var(--text-dim);
+  }
+  .meta-strip b {
+    display: block;
+    font-weight: 600;
+    font-size: .68rem;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--steel);
+    margin-bottom: .15rem;
+  }
+
+  h2 {
+    font-size: clamp(1.9rem, 3.6vw, 2.7rem);
+    font-variation-settings: 'opsz' 60;
+  }
+  h3 {
+    font-size: 1.32rem;
+    font-variation-settings: 'opsz' 30;
+  }
+
+  /* ---------- cards ---------- */
+  .card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 1.6rem;
+  }
+  .grid { display: grid; gap: 1rem; }
+  @media (min-width: 720px) { .cols-2 { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 900px) { .cols-3 { grid-template-columns: repeat(3, 1fr); } }
+
+  /* ---------- priority chips ---------- */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    font-size: .64rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    padding: .28rem .6rem;
+    border-radius: 4px;
+    white-space: nowrap;
+    border: 1px solid;
+  }
+  .chip-must  { color: var(--terracotta-light); border-color: var(--border-hover); background: var(--terracotta-glow); }
+  .chip-then  { color: var(--steel-light);      border-color: rgba(122,149,174,.24); background: var(--steel-glow); }
+  .chip-done  { color: var(--sage-light);       border-color: rgba(122,152,121,.26); background: var(--sage-glow); }
+
+  /* ---------- table ---------- */
+  .table-scroll { overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; }
+  table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: .88rem; }
+  thead th {
+    text-align: left;
+    font-size: .66rem;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--steel);
+    padding: .9rem 1.1rem;
+    background: var(--bg-base);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+  tbody td {
+    padding: .95rem 1.1rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr:nth-child(even) { background: rgba(239,233,219,.015); }
+  td.route { color: var(--cream); font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: .82rem; white-space: nowrap; }
+
+  /* ---------- numbered problems (a real ranked list) ---------- */
+  ol.problems { list-style: none; counter-reset: p; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1.5rem; }
+  ol.problems > li { counter-increment: p; display: grid; grid-template-columns: 2.6rem 1fr; gap: 1.1rem; }
+  ol.problems > li::before {
+    content: counter(p, decimal-leading-zero);
+    font-family: 'Newsreader', Georgia, serif;
+    font-size: 1.45rem;
+    font-variation-settings: 'opsz' 30;
+    color: var(--terracotta-dim);
+    line-height: 1.25;
+  }
+  ol.problems h3 { margin-bottom: .3rem; }
+  ol.problems p { margin: 0 0 .5rem; max-width: 62ch; }
+
+  ul.plain { margin: 0; padding-left: 1.1rem; }
+  ul.plain li { margin-bottom: .45rem; }
+  ul.plain li:last-child { margin-bottom: 0; }
+
+  .note {
+    border-left: 2px solid var(--sage-dim);
+    padding: .1rem 0 .1rem 1.1rem;
+    color: var(--text-secondary);
+    font-family: 'Newsreader', Georgia, serif;
+    font-style: italic;
+    font-size: 1.1rem;
+    font-variation-settings: 'opsz' 36;
+    max-width: 58ch;
+  }
+
+  pre {
+    background: var(--bg-base);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.3rem;
+    overflow-x: auto;
+    margin: 0;
+    font-size: .8rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+  pre code { background: none; padding: 0; color: inherit; }
+  .c-tag { color: var(--steel-light); }
+  .c-txt { color: var(--cream); }
+  .c-dim { color: var(--text-dim); }
+
+  details {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg-surface);
+    padding: 0 1.3rem;
+  }
+  summary {
+    cursor: pointer;
+    padding: 1rem 0;
+    color: var(--cream);
+    font-weight: 500;
+    font-size: .95rem;
+    list-style: none;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::before { content: '+ '; color: var(--terracotta); font-weight: 600; }
+  details[open] summary::before { content: '– '; }
+  details[open] summary { border-bottom: 1px solid var(--border); margin-bottom: 1rem; }
+  details > *:last-child { padding-bottom: 1.2rem; }
+
+  .kicker {
+    font-size: .72rem;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    font-weight: 600;
+  }
+
+  footer {
+    padding-block: 3rem 4rem;
+    color: var(--text-dim);
+    font-size: .82rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<style>
+/* ------------------------------------------------------------------
+   Print stylesheet. The artifact is a dark, screen-first document;
+   these rules make it survive pagination without losing its identity.
+   ------------------------------------------------------------------ */
+@page { size: A4; margin: 0; }
+
+@media print {
+  /* Chrome drops background fills in print by default. Without this the
+     dark ground disappears and every cream heading renders white-on-white. */
+  *, *::before, *::after {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  html, body { background: #0B0F14 !important; }
+
+  /* @page margin is 0 so the dark ground bleeds to the paper edge;
+     the real margin lives here instead. */
+  body { padding: 16mm 0; font-size: 10.5pt; line-height: 1.6; }
+  .wrap { max-width: none; padding-inline: 16mm; }
+
+  /* position:fixed paints on every single page - as a full-page grain
+     overlay that means 12 stacked copies. */
+  body::after { display: none !important; }
+
+  section { padding-block: 9mm; }
+  .masthead { padding-block: 0 9mm; }
+  .masthead h1 { font-size: 34pt; }
+  .masthead .standfirst { font-size: 12pt; max-width: none; }
+  h2 { font-size: 19pt; }
+  h3 { font-size: 12.5pt; }
+  .prose, .prose p { max-width: none; }
+
+  /* Keep atomic blocks whole across the page break. */
+  .card,
+  details,
+  pre,
+  ol.problems > li,
+  .meta-strip,
+  .note { break-inside: avoid; page-break-inside: avoid; }
+
+  /* Never strand a heading at the foot of a page. */
+  h2, h3, .eyebrow { break-after: avoid; page-break-after: avoid; }
+  .eyebrow { break-before: auto; }
+
+  /* On screen the table scrolls inside its own box; on paper it must
+     simply fit, and repeat its header on each page it spans. */
+  .table-scroll { overflow: visible !important; }
+  table { min-width: 0 !important; width: 100% !important; font-size: 9pt; }
+  thead { display: table-header-group; }
+  tbody tr { break-inside: avoid; page-break-inside: avoid; }
+  td.route { font-size: 8.5pt; }
+
+  /* <details> markers are interaction affordances with no meaning in print. */
+  summary::before { content: '' !important; }
+  summary { padding-bottom: .5rem; }
+
+  a { text-decoration: none; }
+
+  /* Grid gaps collapse unpredictably when a grid straddles a page. */
+  .grid.cols-2, .grid.cols-3 { display: block; }
+  .grid.cols-2 > .card, .grid.cols-3 > .card { margin-bottom: 5mm; }
+  .grid.cols-2 > .stack-sm { margin-bottom: 6mm; }
+
+  footer { padding-block: 8mm 0; }
+}
+</style>
+
+</head>
+<body>
+
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Design Brief &middot; For Claude Design</div>
+    <h1>Take the Chambers<br>site <span class="at">past the homepage</span></h1>
+    <p class="standfirst">
+      One page of the Chambers of Men website is designed. The other five are
+      fourteen-line placeholders that say &ldquo;Coming Soon&rdquo; in black
+      Times New Roman on white. This brief asks you to design the rest of the
+      site to the standard the homepage already sets.
+    </p>
+
+    <div class="meta-strip">
+      <div><b>Product</b>Chambers of Men &mdash; public website</div>
+      <div><b>Stack</b>Django 5.1 templates, no JS framework</div>
+      <div><b>Brand</b>v2, locked (BRAND_v2.md)</div>
+      <div><b>Prepared</b>27 August 2026</div>
+    </div>
+  </div>
+</header>
+
+<div class="sep"></div>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">The Situation</div>
+    <div class="prose stack">
+      <h2>What Chambers of Men is</h2>
+      <p>
+        A faith-based movement restoring men through structured discipleship.
+        Its mandate is three words: <strong style="color:var(--cream)">Awaken. Equip.
+        Deploy.</strong> Men join, are interviewed, and are placed into an
+        <em>Iron Circle</em> &mdash; three to five men who meet weekly for
+        accountability. Circles sit inside regional <em>Chambers</em>, which sit
+        under a Council of Elders.
+      </p>
+      <p>
+        The register is a private members&rsquo; club, not a church microsite:
+        considered, crafted, after-hours. Warm and grounded. Tactile and printed
+        rather than glossy and digital. The homepage already achieves this. It is
+        the reference, not a starting point to be argued with.
+      </p>
+      <p class="note">
+        &ldquo;Keep climbing, brother.&rdquo; &mdash; the movement&rsquo;s
+        signature line, and a fair test for any screen you design: would a man
+        under real pressure trust this?
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Page Inventory</div>
+    <h2>Where every page stands</h2>
+    <p class="prose" style="margin:1rem 0 2rem">
+      Six public routes exist. One is designed. Five render an unstyled browser
+      default page &mdash; and all five are already reachable on the live URL.
+    </p>
+
+    <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Route</th>
+            <th>Page</th>
+            <th>Current state</th>
+            <th>Priority</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="route">/</td>
+            <td>Home</td>
+            <td>Fully designed, 11 sections. <strong style="color:var(--cream)">Use as the reference.</strong></td>
+            <td><span class="chip chip-done">Reference</span></td>
+          </tr>
+          <tr>
+            <td class="route">/about/</td>
+            <td>About</td>
+            <td>&ldquo;About &mdash; Coming Soon&rdquo; placeholder</td>
+            <td><span class="chip chip-must">Design</span></td>
+          </tr>
+          <tr>
+            <td class="route">/events/</td>
+            <td>Events index</td>
+            <td>&ldquo;Events &mdash; Coming Soon&rdquo; placeholder</td>
+            <td><span class="chip chip-must">Design</span></td>
+          </tr>
+          <tr>
+            <td class="route">/blog/</td>
+            <td>Blog index</td>
+            <td>&ldquo;Blog &mdash; Coming Soon&rdquo; placeholder</td>
+            <td><span class="chip chip-must">Design</span></td>
+          </tr>
+          <tr>
+            <td class="route">/blog/&lt;slug&gt;/</td>
+            <td>Article</td>
+            <td>Raw <code>&lt;h1&gt;</code> + one unstyled paragraph</td>
+            <td><span class="chip chip-must">Design</span></td>
+          </tr>
+          <tr>
+            <td class="route">/contact/</td>
+            <td>Contact</td>
+            <td>&ldquo;Contact &mdash; Coming Soon&rdquo;, and no form at all</td>
+            <td><span class="chip chip-must">Design</span></td>
+          </tr>
+          <tr>
+            <td class="route">/styleguide/</td>
+            <td>Brand styleguide</td>
+            <td>Complete and current &mdash; palette, type, components</td>
+            <td><span class="chip chip-done">Reference</span></td>
+          </tr>
+          <tr>
+            <td class="route">&mdash;</td>
+            <td>Find a Circle</td>
+            <td>Built, then commented out of the homepage</td>
+            <td><span class="chip chip-then">Decide</span></td>
+          </tr>
+          <tr>
+            <td class="route">&mdash;</td>
+            <td>11 transactional emails</td>
+            <td>Working, but plain single-column HTML</td>
+            <td><span class="chip chip-then">Later</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:2rem">
+      <p class="kicker" style="margin-bottom:.7rem">This is the entire source of <code>about.html</code></p>
+      <pre><code><span class="c-tag">&lt;body&gt;</span>
+    <span class="c-tag">&lt;h1&gt;</span><span class="c-txt">About - Coming Soon</span><span class="c-tag">&lt;/h1&gt;</span>
+    <span class="c-tag">&lt;p&gt;&lt;a</span> href=<span class="c-txt">"/"</span><span class="c-tag">&gt;</span><span class="c-txt">Back to Home</span><span class="c-tag">&lt;/a&gt;&lt;/p&gt;</span>
+<span class="c-tag">&lt;/body&gt;</span>
+<span class="c-dim">&lt;!-- no stylesheet, no nav, no footer, no brand --&gt;</span></code></pre>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">The Work</div>
+    <h2>Nine problems to solve</h2>
+    <p class="prose" style="margin:1rem 0 2.5rem">
+      Ranked. The first four are the brief; the rest are real but can follow.
+    </p>
+
+    <ol class="problems">
+      <li>
+        <div>
+          <h3>Design the five missing pages</h3>
+          <p>
+            About, Events, Blog index, Article, Contact. Each needs the same
+            considered treatment as the homepage &mdash; nav, hero, content
+            sections, footer. Content and data shapes for each are in
+            <em>What you have to work with</em> below.
+          </p>
+        </div>
+      </li>
+
+      <li>
+        <div>
+          <h3>Give the site a base template first</h3>
+          <p>
+            There is no <code>base.html</code>. Every page is a standalone HTML
+            document, and the homepage carries 224 lines of inline
+            <code>&lt;style&gt;</code>. Nav, footer and tokens are not shared, so
+            any change has to be made seven times &mdash; which is exactly how the
+            styleguide ended up specifying a typeface the brand had retired.
+          </p>
+          <p>
+            Extract one base template and one stylesheet, then build the pages on
+            it. This is the highest-leverage move in the brief.
+          </p>
+        </div>
+      </li>
+
+      <li>
+        <div>
+          <h3>The navigation cannot reach four of the six pages</h3>
+          <p>
+            Every nav item is an on-page anchor &mdash;
+            <code>#mandate</code>, <code>#pillars</code>, <code>#vision</code>,
+            <code>#events</code>, <code>#structure</code>, <code>#media</code>.
+            Nothing links to <code>/about/</code>, <code>/events/</code>,
+            <code>/blog/</code> or <code>/contact/</code>. Those pages are
+            orphaned: reachable only by typing the URL.
+          </p>
+          <p>
+            Design a navigation that carries both a one-page narrative and real
+            sub-pages, and resolve the collision where <code>#events</code>
+            (a homepage section) and <code>/events/</code> (a page) both exist.
+          </p>
+        </div>
+      </li>
+
+      <li>
+        <div>
+          <h3>The join form cannot feed the thing it exists to feed</h3>
+          <p>
+            The form asks for name and email only. But the agent that places a man
+            into an Iron Circle matches <strong style="color:var(--cream)">on
+            city</strong> &mdash; and the form never asks for one. Every signup
+            lands unplaceable. The CRM also reports on <code>how_heard</code>,
+            which is likewise never captured.
+          </p>
+          <p>
+            Design the signup as a real step of the journey, not an email capture.
+            It must collect at minimum: name, email, city. Wanted:
+            phone, how they heard, and why they want in. Balance that against
+            asking a man in a hard season for too much at once &mdash; a short
+            first step with a second screen is a legitimate answer.
+          </p>
+        </div>
+      </li>
+
+      <li>
+        <div>
+          <h3>Above-the-fold content starts invisible</h3>
+          <p>
+            Every element carries a <code>.reveal</code> class that begins at
+            <code>opacity: 0</code> and waits for an IntersectionObserver. The
+            hero is blank on first paint until the observer fires and an 800ms
+            transition completes. Keep the reveal for content below the fold;
+            the hero should render immediately.
+          </p>
+        </div>
+      </li>
+
+      <li>
+        <div>
+          <h3>Decide what happens to Find a Circle</h3>
+          <p>
+            A full section &mdash; search box, six circle cards, join buttons
+            &mdash; sits commented out in the homepage source, with six invented
+            circles in it (&ldquo;Led by Brother Marcus T.&rdquo;, London through
+            Glasgow). It was hidden because the movement does not yet have circles
+            in those cities.
+          </p>
+          <p>
+            For a movement whose whole structure is Iron Circles, its absence is
+            the biggest hole in the story. Design a version that is honest at
+            one circle and still works at fifty &mdash; and note that whatever you
+            design must bind to real records, never to placeholder brothers.
+          </p>
+        </div>
+      </li>
+
+      <li>
+        <div>
+          <h3>The desktop hero leaves half the screen empty</h3>
+          <p>
+            The hero is a left-hand column with nothing to its right. The brand
+            specifies a <em>photo-cutout</em> treatment &mdash; a photograph
+            clipped inside the &ldquo;cm&rdquo; mark (§5) &mdash; which is
+            defined, striking, and used nowhere on the site. This is the obvious
+            place for it.
+          </p>
+        </div>
+      </li>
+
+      <li>
+        <div>
+          <h3>No favicon, no share cards</h3>
+          <p>
+            No favicon, no Open Graph or Twitter tags, no canonical URL. A link
+            shared into WhatsApp &mdash; which is how this movement actually
+            spreads &mdash; renders as a bare grey box. The
+            <code>cm</code> mark exists in four PNG variants, ready to use.
+          </p>
+        </div>
+      </li>
+
+      <li>
+        <div>
+          <h3>The 11 transactional emails are undesigned</h3>
+          <p>
+            Welcome, four follow-ups, interview reminder, three event mails,
+            circle welcome, inactive check-in. They now use the correct v2
+            palette but remain plain single-column HTML. For most men these are
+            the <em>only</em> Chambers surface they see between signup and their
+            first circle meeting. Treat them as a real design surface, within
+            the constraints of email HTML.
+          </p>
+        </div>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Non-negotiable</div>
+    <h2>The brand is <span class="at">locked</span></h2>
+    <p class="prose" style="margin:1rem 0 2rem">
+      v2 was signed off in April 2026 and is documented in
+      <code>BRAND_v2.md</code> with a live reference at <code>/styleguide/</code>.
+      Design within it. If something in it genuinely blocks good work, flag it
+      rather than quietly working around it.
+    </p>
+
+    <div class="grid cols-3">
+      <div class="card">
+        <h3 style="margin-bottom:.6rem">Colour</h3>
+        <p style="margin:0 0 .8rem;font-size:.9rem">Dark ground, terracotta leads, sage supports, cream carries the type.</p>
+        <ul class="plain" style="font-size:.85rem">
+          <li>Terracotta <code>#D17F56</code> &mdash; CTAs only, never body copy</li>
+          <li>Sage <code>#7A9879</code> &mdash; scripture, pull quotes</li>
+          <li>Steel <code>#7A95AE</code> &mdash; dates, locations, meta</li>
+          <li>Cream <code>#EFE9DB</code> &mdash; the only reading colour</li>
+          <li><strong style="color:var(--terracotta-light)">Retired:</strong> all teal and gold</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:.6rem">Type</h3>
+        <p style="margin:0 0 .8rem;font-size:.9rem">Two families, no more.</p>
+        <ul class="plain" style="font-size:.85rem">
+          <li><strong style="color:var(--cream)">Newsreader</strong> &mdash; headings, pull quotes. Use the <code>opsz</code> axis: 72 hero, 60 section, 30 card</li>
+          <li><strong style="color:var(--cream)">DM Sans</strong> &mdash; body, eyebrows, UI</li>
+          <li><strong style="color:var(--terracotta-light)">Retired:</strong> Playfair Display, Cormorant Garamond</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:.6rem">Mark &amp; texture</h3>
+        <p style="margin:0 0 .8rem;font-size:.9rem">The organic &ldquo;cm&rdquo; script, never the retired boxed CM.</p>
+        <ul class="plain" style="font-size:.85rem">
+          <li>Four PNGs in <code>static/brand/</code>; recolour via CSS <code>mask-image</code></li>
+          <li>SVG not yet delivered &mdash; design so it can drop in later</li>
+          <li>Paper grain at <code>.018</code> on every large surface</li>
+          <li>Feather icons, 1.5px stroke, inline SVG</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Content</div>
+    <h2>What you have to work with</h2>
+    <p class="prose" style="margin:1rem 0 2rem">
+      Every page must bind to real CRM records. The homepage currently does not
+      &mdash; its events and circles are hardcoded, while the view already passes
+      real ones the template ignores. Design against these shapes, and design the
+      empty state for each, because most of these tables start empty.
+    </p>
+
+    <div class="stack">
+      <details open>
+        <summary>Event &mdash; drives /events/ and the homepage events section</summary>
+        <ul class="plain" style="font-size:.9rem">
+          <li><code>name</code>, <code>description</code>, <code>location</code></li>
+          <li><code>date</code>, optional <code>time</code>, optional <code>end_date</code> for multi-day</li>
+          <li><code>event_type</code> &mdash; one of five, and they are not equivalent: <em>Men Reborn</em> (launch weekend), <em>Man at the Altar</em> (monthly all-night prayer), <em>Leadership Summit</em> (bi-annual), <em>Gathering of the Chambers</em> (annual), <em>Other</em></li>
+          <li><code>chamber</code> &mdash; which region it belongs to</li>
+        </ul>
+        <p style="font-size:.9rem;margin-top:.8rem">
+          The five types carry different weight and rhythm. A design that renders
+          them as five identical cards throws away the most interesting thing
+          about the calendar.
+        </p>
+      </details>
+
+      <details open>
+        <summary>BlogPost &mdash; drives /blog/ and the article page</summary>
+        <ul class="plain" style="font-size:.9rem">
+          <li><code>title</code>, <code>slug</code>, <code>content</code>, <code>excerpt</code> (max 500 chars)</li>
+          <li><code>category</code> &mdash; Chamber Doctrine, Testimony, Devotional, Movement Update, Teaching</li>
+          <li><code>author</code> &mdash; a member record, may be absent</li>
+          <li><code>featured_image</code> &mdash; optional, so every layout needs a no-image variant</li>
+          <li><code>published_date</code></li>
+        </ul>
+        <p style="font-size:.9rem;margin-top:.8rem">
+          The five categories read very differently &mdash; a testimony is a
+          man&rsquo;s story, doctrine is a short hard rule. Worth distinct
+          treatments. Note: <code>content</code> is plain text today, so decide
+          whether the article page needs rich text and say so.
+        </p>
+      </details>
+
+      <details open>
+        <summary>IronCircle &mdash; drives Find a Circle</summary>
+        <ul class="plain" style="font-size:.9rem">
+          <li><code>name</code>, <code>description</code>, <code>meeting_location</code></li>
+          <li><code>meeting_day</code>, <code>meeting_time</code></li>
+          <li><code>circle_leader</code>, <code>chamber</code> (city and region)</li>
+          <li><code>is_open</code>, <code>max_members</code> (default 5), current member count</li>
+        </ul>
+        <p style="font-size:.9rem;margin-top:.8rem">
+          Do not surface members&rsquo; names publicly. Leader first name and
+          last initial at most, and confirm even that with Ben.
+        </p>
+      </details>
+
+      <details open>
+        <summary>Signup &mdash; what the form should capture</summary>
+        <ul class="plain" style="font-size:.9rem">
+          <li><code>name</code>, <code>email</code> &mdash; required today</li>
+          <li><code>city</code> &mdash; <strong style="color:var(--cream)">needed for circle matching</strong>, currently never asked</li>
+          <li><code>phone</code>, <code>message</code> (why they want in), <code>how_heard</code> &mdash; accepted, never asked</li>
+        </ul>
+        <p style="font-size:.9rem;margin-top:.8rem">
+          Submitting triggers a welcome email within seconds and a
+          four-touch follow-up sequence over ten days. Design the confirmation
+          state to set that expectation.
+        </p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Already Handled</div>
+    <h2>Do not spend time here</h2>
+    <p class="prose" style="margin:1rem 0 2rem">
+      A platform fix landed alongside this brief. These are done &mdash; listed
+      so you do not re-solve them, and because two of them changed things you
+      will see in the code.
+    </p>
+
+    <div class="grid cols-2">
+      <div class="card">
+        <h3 style="margin-bottom:.7rem">Fixed in code</h3>
+        <ul class="plain" style="font-size:.88rem">
+          <li>The styleguide&rsquo;s back link was styled as <code>nav.back-nav</code> while the markup is an <code>&lt;a&gt;</code>. No rule matched, so a 1280px default-blue arrow covered the top of the page.</li>
+          <li>An uncaught <code>TypeError</code> fired on every homepage load &mdash; a listener for the commented-out circle search.</li>
+          <li>The join form showed &ldquo;Welcome to the Chambers, brother&rdquo; even when the submission was rejected.</li>
+          <li>Brand masks now use <code>{% static %}</code> rather than relative paths.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="margin-bottom:.7rem">Corrected in the brand docs</h3>
+        <ul class="plain" style="font-size:.88rem">
+          <li>The audit checklist in <code>BRAND_v2.md</code> §10 still told auditors to use <strong style="color:var(--cream)">Playfair Display</strong> &mdash; the exact typeface §4 retires. The styleguide&rsquo;s type spec said the same. Both now say Newsreader.</li>
+          <li>The four-way font comparison on the styleguide is <em>deliberate</em> &mdash; it records why Newsreader won. Leave it.</li>
+          <li>The 11 email templates were still on the retired v1 teal. Now on v2 tokens, though still undesigned.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Deliverables</div>
+    <h2>What good looks like</h2>
+
+    <div class="grid cols-2" style="margin-top:1.6rem">
+      <div class="stack-sm">
+        <p class="kicker">Ship</p>
+        <ul class="plain" style="font-size:.92rem">
+          <li>A base template and shared stylesheet the whole site is built on</li>
+          <li>Five designed pages: About, Events, Blog, Article, Contact</li>
+          <li>A navigation that reaches every page, mobile included</li>
+          <li>A signup that captures city</li>
+          <li>Favicon and share cards</li>
+          <li>Every section bound to real CRM data, with a designed empty state</li>
+        </ul>
+      </div>
+
+      <div class="stack-sm">
+        <p class="kicker">Hold to</p>
+        <ul class="plain" style="font-size:.92rem">
+          <li>Django templates, no framework &mdash; this deploys as one small Django app</li>
+          <li>The homepage sets the quality bar; match it rather than diverging</li>
+          <li>Real copy throughout, in the brand voice: warm, purposeful, never corporate. Openings are &ldquo;Hi [First name],&rdquo; and never &ldquo;Dear&rdquo;</li>
+          <li>Scripture is on-brand where it earns its place &mdash; Proverbs 27:17 is the movement&rsquo;s spine</li>
+          <li>No invented people, circles, testimonies, or member counts, at any fidelity</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<section>
+  <div class="wrap">
+    <div class="eyebrow">Open Questions</div>
+    <h2>Answer before or during</h2>
+    <div class="prose stack" style="margin-top:1.2rem">
+      <ol class="problems" style="gap:1.2rem">
+        <li>
+          <div>
+            <h3>Which domain is this launching on?</h3>
+            <p>
+              <code>thechamberofmen.com</code> has no DNS at all, so mail sent
+              from it fails authentication. The sender has been switched to
+              <code>chambersofmen.com</code>, which is registered but currently
+              serves nothing and still needs verifying in SendGrid. Confirm this
+              is the launch domain before the site goes live &mdash; it decides
+              canonical URLs and share cards.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>How many Iron Circles genuinely exist today?</h3>
+            <p>
+              This decides whether Find a Circle returns as a searchable
+              directory or as a single honest invitation.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Is there photography?</h3>
+            <p>
+              The brand calls for analogue-feeling images and the photo-cutout
+              treatment. If no shoot exists, the design needs to hold without
+              photography &mdash; a materially different direction, and better
+              decided now than discovered late.
+            </p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <h3>Is the blog actually launching?</h3>
+            <p>
+              Five content categories and a whole publishing pipeline are built,
+              with nothing written. Designing an empty blog is wasted effort if
+              it is a next-year idea.
+            </p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<footer>
+  <div class="wrap">
+    <p style="margin:0 0 .4rem"><strong style="color:var(--cream)">Reference material</strong></p>
+    <p style="margin:0">
+      <code>BRAND_v2.md</code> &mdash; full brand spec &middot;
+      <code>/styleguide/</code> &mdash; live components &middot;
+      <code>templates/website/home.html</code> &mdash; the quality bar &middot;
+      <code>crm/models.py</code> &mdash; every data shape
+    </p>
+    <p style="margin:1.6rem 0 0;font-family:'Newsreader',Georgia,serif;font-style:italic;color:var(--sage-dim);font-size:1.05rem">
+      Keep climbing, brother.
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>

@@ -8,7 +8,9 @@ Schedule: Quarterly review
 Phase: 3 (stub ready for implementation)
 """
 
-from crm.agents import is_agent_active, log_task, update_agent_run, create_admin_flag
+from crm.agents import (
+    agent_setting, is_agent_active, log_task, update_agent_run, create_admin_flag,
+)
 
 AGENT_NAME = 'leadership'
 
@@ -21,6 +23,9 @@ def quarterly_review():
         return
 
     # Find active members who have been engaged and could move up
+    min_activities = agent_setting(AGENT_NAME, 'min_activities_for_promotion', 5)
+    min_events = agent_setting(AGENT_NAME, 'min_events_for_promotion', 2)
+
     active_members = Member.objects.filter(status='active', role='member')
     candidates = 0
 
@@ -28,9 +33,11 @@ def quarterly_review():
         activity_count = member.activity_logs.count()
         event_count = member.event_attendance.filter(attended=True).count()
 
-        if activity_count >= 5 and event_count >= 2:
+        if activity_count >= min_activities and event_count >= min_events:
+            # A progression still sitting at nominated/under_review means this
+            # member has already been put forward.
             existing = LeadershipProgression.objects.filter(
-                member=member, is_approved=False
+                member=member, status__in=('nominated', 'under_review')
             ).exists()
 
             if not existing:
@@ -38,12 +45,13 @@ def quarterly_review():
                     member=member,
                     from_role='member',
                     to_role='foundation_support',
-                    reason=(
+                    status='nominated',
+                    notes=(
                         f'High engagement: {activity_count} activities, '
                         f'{event_count} event attendances. '
                         f'Recommended for Foundation Support role.'
                     ),
-                    recommended_by='Leadership Pipeline Agent',
+                    nominated_by='Leadership Pipeline Agent',
                 )
 
                 create_admin_flag(

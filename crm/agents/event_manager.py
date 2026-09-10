@@ -64,7 +64,7 @@ def daily_event_check():
     for event in Event.objects.filter(date=yesterday, is_published=True):
         for record in event.attendance_records.filter(attended=True).select_related('member'):
             member = record.member
-            context = {' name': member.full_name, 'first_name': member.first_name, 'event_name': event.name}
+            context = {'name': member.full_name, 'first_name': member.first_name, 'event_name': event.name}
             sent = send_template_email('event_thank_you', member.email, context)
             if sent:
                 log_task(AGENT_NAME, 'Post-event thank you', f'{event.name} -> {member.full_name}',

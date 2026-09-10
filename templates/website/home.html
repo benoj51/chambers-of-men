@@ -30,7 +30,7 @@
         nav{position:fixed;top:0;left:0;right:0;z-index:1000;height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;background:rgba(8,9,13,.6);backdrop-filter:blur(24px) saturate(1.4);-webkit-backdrop-filter:blur(24px) saturate(1.4);border-bottom:1px solid var(--border);transition:all .4s}
         nav.scrolled{background:rgba(8,9,13,.92);border-bottom-color:rgba(209,127,86,.1);box-shadow:0 8px 32px rgba(0,0,0,.4)}
         .nav-brand{display:flex;align-items:center;gap:.85rem;text-decoration:none}
-        .nav-logo{width:40px;height:40px;background:var(--cream);-webkit-mask:url('../../static/brand/cm-mark-black.png') center/contain no-repeat;mask:url('../../static/brand/cm-mark-black.png') center/contain no-repeat;transition:background .3s}
+        .nav-logo{width:40px;height:40px;background:var(--cream);-webkit-mask:url('{% static "brand/cm-mark-black.png" %}') center/contain no-repeat;mask:url('{% static "brand/cm-mark-black.png" %}') center/contain no-repeat;transition:background .3s}
         .nav-brand:hover .nav-logo{background:#D17F56}
         .nav-brand-text{font-family:'DM Sans',sans-serif;font-weight:600;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text-primary)}
         .nav-links{display:flex;gap:0;list-style:none;align-items:center;height:100%}
@@ -54,8 +54,8 @@
         .hero-eyebrow{font-size:.68rem;font-weight:600;letter-spacing:.35em;text-transform:uppercase;color:var(--terracotta);margin-bottom:2rem;display:inline-flex;align-items:center;gap:.8rem}
         .hero-eyebrow::before{content:'';width:40px;height:1px;background:linear-gradient(90deg,transparent,var(--terracotta))}
         .hero h1{font-size:clamp(3.3rem,7vw,5.7rem);font-weight:600;line-height:1.05;margin-bottom:2rem;letter-spacing:-.015em}
-        .hero-mark{width:96px;height:96px;background:var(--cream);-webkit-mask:url('../../static/brand/cm-mark-black.png') center/contain no-repeat;mask:url('../../static/brand/cm-mark-black.png') center/contain no-repeat;margin-bottom:2.2rem;opacity:.92}
-        .footer-lockup{width:180px;height:120px;background:var(--cream);-webkit-mask:url('../../static/brand/cm-lockup-black.png') center/contain no-repeat;mask:url('../../static/brand/cm-lockup-black.png') center/contain no-repeat;margin-bottom:1.2rem;opacity:.88}
+        .hero-mark{width:96px;height:96px;background:var(--cream);-webkit-mask:url('{% static "brand/cm-mark-black.png" %}') center/contain no-repeat;mask:url('{% static "brand/cm-mark-black.png" %}') center/contain no-repeat;margin-bottom:2.2rem;opacity:.92}
+        .footer-lockup{width:180px;height:120px;background:var(--cream);-webkit-mask:url('{% static "brand/cm-lockup-black.png" %}') center/contain no-repeat;mask:url('{% static "brand/cm-lockup-black.png" %}') center/contain no-repeat;margin-bottom:1.2rem;opacity:.88}
         .hero h1 .line-2{display:block;background:linear-gradient(135deg,var(--terracotta-light),var(--terracotta),var(--terracotta-dim));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
         .hero-sub{font-size:1.1rem;line-height:1.8;color:var(--text-secondary);max-width:540px;margin-bottom:3rem}
         .hero-actions{display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
@@ -483,6 +483,7 @@
             </form>
             {% if messages %}{% for message in messages %}<div style="margin-top:1.5rem;color:var(--terracotta);font-weight:500">{{ message }}</div>{% endfor %}{% endif %}
             <div id="joinSuccess" style="display:none;margin-top:1.5rem;color:var(--terracotta);font-weight:500">Welcome to the Chambers, brother. We will be in touch.</div>
+            <div id="joinError" role="alert" style="display:none;margin-top:1.5rem;color:var(--terracotta-light);font-weight:500"></div>
             <p class="join-tagline reveal reveal-delay-4">Keep climbing, brother.</p>
         </div></div>
     </section>
@@ -506,9 +507,30 @@
         const toggle=document.getElementById('mobileToggle'),mobileNav=document.getElementById('mobileNav');
         toggle.addEventListener('click',()=>{toggle.classList.toggle('open');mobileNav.classList.toggle('open')});
         function closeMobile(){toggle.classList.remove('open');mobileNav.classList.remove('open')}
-        function handleJoin(e){e.preventDefault();const form=document.getElementById('joinForm');const data=new FormData(form);fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}}).then(r=>r.json()).then(d=>{form.style.display='none';document.getElementById('joinSuccess').style.display='block'}).catch(()=>{form.submit()})}
+        function handleJoin(e){
+            e.preventDefault();
+            const form=document.getElementById('joinForm');
+            const btn=form.querySelector('button[type=submit]');
+            const err=document.getElementById('joinError');
+            err.style.display='none';
+            btn.disabled=true;btn.textContent='Sending...';
+            fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}})
+                .then(r=>r.json().then(d=>({ok:r.ok,d})))
+                .then(({ok,d})=>{
+                    if(ok&&d.status==='success'){
+                        form.style.display='none';
+                        document.getElementById('joinSuccess').style.display='block';
+                    }else{
+                        err.textContent=(d&&d.message)||'Something went wrong. Please try again.';
+                        err.style.display='block';
+                        btn.disabled=false;btn.textContent='Join Now';
+                    }
+                })
+                .catch(()=>{form.submit()});
+        }
         function searchCircles(){const q=document.getElementById('circleSearch').value.trim();if(!q)return;const cards=document.querySelectorAll('.circle-card');let found=false;cards.forEach(c=>{const city=c.querySelector('.circle-city').textContent.toLowerCase();const region=c.querySelector('.circle-region').textContent.toLowerCase();if(city.includes(q.toLowerCase())||region.includes(q.toLowerCase())){c.style.display='';found=true}else{c.style.display='none'}});if(!found){cards.forEach(c=>c.style.display='');alert('No circles found for "'+q+'". Showing all available circles. Register your interest and we will connect you as we expand.')}}
-        document.getElementById('circleSearch').addEventListener('keydown',function(e){if(e.key==='Enter')searchCircles()});
+        const circleSearch=document.getElementById('circleSearch');
+        if(circleSearch)circleSearch.addEventListener('keydown',function(e){if(e.key==='Enter')searchCircles()});
         function requestCircle(btn){btn.textContent='Request Sent!';btn.style.borderColor='var(--terracotta)';btn.style.color='var(--terracotta)';btn.style.background='var(--terracotta-glow)';btn.disabled=true}
     </script>
 </body>

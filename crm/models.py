@@ -74,7 +74,7 @@ class Member(models.Model):
         help_text="How many years the member has been active in their church"
     )
     notes = models.TextField(blank=True)
-    reason_for_joining = models.TextField(blank=True, help_text="Why they want to be part of TCM")
+    reason_for_joining = models.TextField(blank=True, help_text="Why they want to be part of Chambers of Men")
 
     # Agent framework fields
     onboarding_step = models.CharField(max_length=50, default='new', blank=True)
@@ -270,13 +270,53 @@ class AgentConfig(models.Model):
 class EmailTemplate(models.Model):
     """Reusable email templates for agent communications."""
     template_key = models.CharField(max_length=100, unique=True)
-    subject = models.CharField(max_length=300)
-    body_html = models.TextField()
+    subject = models.CharField(
+        max_length=300,
+        help_text="Email subject line. Use {{ name }} for personalisation."
+    )
+    body_html = models.TextField(
+        help_text=(
+            "HTML email body. Available variables: {{ name }}, {{ first_name }}, "
+            "{{ email }}, {{ city }}, {{ event_name }}, {{ event_date }}, "
+            "{{ circle_name }}, {{ leader_name }}, {{ interview_date }}"
+        )
+    )
+    body_text = models.TextField(
+        blank=True,
+        help_text="Plain text fallback. Leave blank to auto-generate from the HTML."
+    )
+    from_name = models.CharField(max_length=100, blank=True)
+    from_email = models.EmailField(blank=True)
+    is_active = models.BooleanField(default=True, help_text="Enable/disable this template")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.template_key}: {self.subject}"
+
+    def render(self, context_data=None):
+        """Render subject, HTML body and text body against ``context_data``.
+
+        Returns a ``(subject, body_html, body_text)`` tuple. ``body_text`` is
+        returned as stored; the caller is responsible for deriving a fallback
+        when it is blank.
+        """
+        from django.template import Context, Template
+
+        ctx = Context(context_data or {})
+        subject = Template(self.subject).render(ctx)
+        body_html = Template(self.body_html).render(ctx)
+        body_text = Template(self.body_text).render(ctx) if self.body_text else ''
+        return subject, body_html, body_text
+
+    @property
+    def sender(self):
+        """Full ``Name <email>`` sender string, falling back to project defaults."""
+        from django.conf import settings
+
+        name = self.from_name or getattr(settings, 'DEFAULT_FROM_NAME', '')
+        email = self.from_email or settings.DEFAULT_FROM_EMAIL
+        return f"{name} <{email}>" if name else email
 
     class Meta:
         ordering = ['template_key']
@@ -291,11 +331,14 @@ class TaskLog(models.Model):
         ('success', 'Success'),
     ]
 
-    agent_name = models.CharField(max_length=50)
-    task_name = models.CharField(max_length=200)
+    agent_name = models.CharField(max_length=50, help_text="Which agent performed this action")
+    task_name = models.CharField(max_length=200, help_text="What the agent did")
     level = models.CharField(max_length=10, choices=LEVEL_CHOICES, default='info')
-    message = models.TextField()
-    details = models.JSONField(default=dict, blank=True)
+    message = models.TextField(blank=True, help_text="Additional details or error messages")
+    details = models.JSONField(
+        default=dict, blank=True,
+        help_text="Structured context, e.g. email_sent_to / template_used"
+    )
     member = models.ForeignKey(
         Member, on_delete=models.SET_NULL, null=True, blank=True,
         related_name='task_logs'
@@ -318,13 +361,28 @@ class MemberActivityLog(models.Model):
         ('leadership_task', 'Leadership Task'),
         ('mentoring', 'Mentoring Session'),
         ('outreach', 'Outreach Activity'),
+        ('email_opened', 'Email Opened'),
+        ('email_clicked', 'Email Link Clicked'),
+        ('form_submission', 'Form Submission'),
+        ('interview_completed', 'Interview Completed'),
+        ('role_assigned', 'Role Assigned'),
         ('other', 'Other'),
     ]
 
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='activity_logs')
     activity_type = models.CharField(max_length=30, choices=ACTIVITY_TYPES)
     description = models.TextField(blank=True)
-    points = models.PositiveIntegerField(default=1)
+    points = models.PositiveIntegerField(
+        default=1, help_text="Weighting used by the engagement score"
+    )
+    related_event = models.ForeignKey(
+        Event, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='activity_logs'
+    )
+    related_circle = models.ForeignKey(
+        IronCircle, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='activity_logs'
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -344,9 +402,23 @@ class AdminFlag(models.Model):
         ('urgent', 'Urgent'),
     ]
 
-    agent_name = models.CharField(max_length=50)
+    FLAG_TYPE_CHOICES = [
+        ('inactive_member', 'Inactive Member'),
+        ('circle_capacity', 'Circle at Capacity'),
+        ('low_event_rsvp', 'Low Event RSVP'),
+        ('missing_data', 'Missing Member Data'),
+        ('onboarding_stalled', 'Onboarding Stalled'),
+        ('leadership_candidate', 'Leadership Candidate'),
+        ('general', 'General Alert'),
+    ]
+
+    agent_name = models.CharField(max_length=50, help_text="Which agent raised this flag")
+    flag_type = models.CharField(
+        max_length=30, choices=FLAG_TYPE_CHOICES, default='general',
+        help_text="Used to de-duplicate repeat flags for the same member"
+    )
     title = models.CharField(max_length=300)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     priority = models.CharField(max_length=10, choices=PRIORITY_CHOICES, default='medium')
     member = models.ForeignKey(
         Member, on_delete=models.SET_NULL, null=True, blank=True,
@@ -355,6 +427,7 @@ class AdminFlag(models.Model):
     is_resolved = models.BooleanField(default=False)
     resolved_by = models.CharField(max_length=200, blank=True)
     resolved_at = models.DateTimeField(null=True, blank=True)
+    resolution_notes = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -383,11 +456,22 @@ class SocialMediaPost(models.Model):
     ]
 
     platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
-    content = models.TextField()
+    content = models.TextField(help_text="Post caption / description")
+    hashtags = models.TextField(blank=True, help_text="Hashtags separated by spaces")
     media_url = models.URLField(blank=True)
+    blog_post = models.ForeignKey(
+        BlogPost, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='social_posts', help_text="Blog post this was generated from"
+    )
     scheduled_for = models.DateTimeField(null=True, blank=True)
+    published_at = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='draft')
-    external_id = models.CharField(max_length=200, blank=True)
+    external_id = models.CharField(
+        max_length=200, blank=True, help_text="ID from the platform after publishing"
+    )
+    engagement_data = models.JSONField(
+        default=dict, blank=True, help_text="Likes, shares, comments, views"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -400,11 +484,23 @@ class SocialMediaPost(models.Model):
 
 class CircleAssignmentHistory(models.Model):
     """History of Iron Circle assignments for tracking."""
+    ACTION_CHOICES = [
+        ('joined', 'Joined Circle'),
+        ('left', 'Left Circle'),
+        ('transferred', 'Transferred'),
+        ('promoted_leader', 'Promoted to Leader'),
+    ]
+
     member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='circle_history')
     circle = models.ForeignKey(IronCircle, on_delete=models.CASCADE, related_name='assignment_history')
+    action = models.CharField(max_length=20, choices=ACTION_CHOICES, default='joined')
     assigned_date = models.DateField(default=timezone.now)
     removed_date = models.DateField(null=True, blank=True)
     reason = models.TextField(blank=True)
+    performed_by = models.CharField(
+        max_length=200, blank=True, help_text="Agent or admin who made the change"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.member} -> {self.circle} ({self.assigned_date})"
@@ -424,15 +520,23 @@ class LeadershipProgression(models.Model):
         ('declined', 'Declined'),
     ]
 
-    member = models.ForeignKey(Member, on_delete=models.CASCADE, related_name='leadership_progressions')
-    from_role = models.CharField(max_length=30)
-    to_role = models.CharField(max_length=30)
+    member = models.ForeignKey(
+        Member, on_delete=models.CASCADE, related_name='leadership_progressions'
+    )
+    from_role = models.CharField(max_length=30, choices=Member.ROLE_CHOICES)
+    to_role = models.CharField(max_length=30, choices=Member.ROLE_CHOICES)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='nominated')
-    nominated_by = models.CharField(max_length=50, default='system')
+    nominated_by = models.CharField(
+        max_length=200, default='system', help_text="Agent or leader who recommended"
+    )
     reviewed_by = models.CharField(max_length=200, blank=True)
-    notes = models.TextField(blank=True)
+    notes = models.TextField(blank=True, help_text="Why this progression was recommended or made")
     created_at = models.DateTimeField(auto_now_add=True)
     reviewed_at = models.DateTimeField(null=True, blank=True)
+
+    @property
+    def is_pending(self):
+        return self.status in ('nominated', 'under_review')
 
     def __str__(self):
         return f"{self.member}: {self.from_role} -> {self.to_role} ({self.status})"
